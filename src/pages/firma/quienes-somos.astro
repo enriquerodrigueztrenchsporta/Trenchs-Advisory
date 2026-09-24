@@ -2,13 +2,18 @@
 import Page from '../../layouts/Page.astro';
 import PageHero from '../../components/PageHero.astro';
 import Disciplines from '../../components/Disciplines.astro';
-import Problem from '../../components/Problem.astro';
-import Tailored from '../../components/Tailored.astro';
+import Symptoms from '../../components/Symptoms.astro';
+import WhyNow from '../../components/WhyNow.astro';
 import Why from '../../components/Why.astro';
 ---
 <Page
   title="Quiénes somos · Trenchs Advisory"
   description="Integramos estrategia, finanzas, datos, tecnología e inteligencia artificial bajo un único responsable y una sola lógica económica."
+  closing={{
+    kicker: 'Conózcanos',
+    title: 'La mejor forma de saber cómo trabajamos es una primera conversación.',
+    text: 'Cuéntenos qué decisión quiere mejorar y le diremos, con franqueza, si podemos ayudarle.',
+  }}
 >
   <PageHero
     kicker="La firma · Quiénes somos"
@@ -16,7 +21,7 @@ import Why from '../../components/Why.astro';
     lead="Ayudamos a empresas y administraciones a decidir con evidencia, anticipación y criterio económico. No vendemos tecnología ni informes: vendemos capacidad de decisión."
   />
   <Disciplines num="01" />
-  <Problem num="02" symptoms />
-  <Tailored num="03" />
+  <Symptoms num="02" />
+  <WhyNow num="03" />
   <Why num="04" />
 </Page>

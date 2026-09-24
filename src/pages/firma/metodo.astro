@@ -1,18 +1,23 @@
 ---
 import Page from '../../layouts/Page.astro';
 import PageHero from '../../components/PageHero.astro';
-import Method from '../../components/Method.astro';
-import Questions from '../../components/Questions.astro';
+import MethodDetail from '../../components/MethodDetail.astro';
+import Journey from '../../components/Journey.astro';
 ---
 <Page
   title="Método · Trenchs Advisory"
   description="Diagnóstico, diseño, construcción, adopción y mejora continua: el método común a todos nuestros proyectos."
+  closing={{
+    kicker: 'Fase 1',
+    title: 'Todo empieza entendiendo bien el problema.',
+    text: 'En la sesión inicial revisamos sus decisiones críticas y el estado de su información. Sin coste ni compromiso.',
+  }}
 >
   <PageHero
     kicker="La firma · Método"
     title="Del problema a una solución funcionando."
     lead="Toda intervención sigue el mismo método, sea cual sea el área de servicio. El objetivo es que ningún proyecto termine en un informe, sino en una decisión tomada y un proceso funcionando."
   />
-  <Method num="01" />
-  <Questions num="02" />
+  <MethodDetail num="01" />
+  <Journey num="02" />
 </Page>

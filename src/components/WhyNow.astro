@@ -1,0 +1,112 @@
+---
+import BgLines from './BgLines.astro';
+
+// Documento fundacional, apartado 4.1: por qué ahora.
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+const reasons = [
+  { k: 'IA', t: 'Automatizar ya no es exclusivo de la gran empresa', d: 'La inteligencia artificial ha reducido drásticamente el coste de automatizar tareas analíticas y documentales.' },
+  { k: 'Fondos', t: 'Hay presupuesto, falta criterio', d: 'Los programas públicos de digitalización han generado presupuesto y, con él, la necesidad de un criterio independiente para orientarlo bien.' },
+  { k: 'Reporting', t: 'Más exigencia de información', d: 'Sostenibilidad, transparencia y control financiero obligan a estructurar información que hoy está dispersa.' },
+  { k: 'Remoto', t: 'Cercanía sin estructura física', d: 'El trabajo en remoto permite acompañar a cada organización de forma continua, esté donde esté.' },
+];
+---
+<section class="section whynow has-bg bg-grid" style="--grid-x:15%; --grid-y:30%">
+  <BgLines side="right" />
+  <div class="container whynow__grid">
+    <div class="whynow__head">
+      <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Por qué ahora</p>
+      <h2 class="display" data-reveal>El ritmo de cambio ya no permite gestionar mirando por el retrovisor.</h2>
+    </div>
+    <ol class="whynow__list">
+      {reasons.map((r, i) => (
+        <li class="wn" data-reveal style={`--d:${i}`}>
+          <span class="wn__key">{r.k}</span>
+          <div>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </div>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .whynow__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: start;
+  }
+  .whynow__head {
+    position: sticky;
+    top: 7rem;
+  }
+  .whynow__head h2 {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .whynow__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    counter-reset: wn;
+  }
+  .wn {
+    display: grid;
+    grid-template-columns: 7rem 1fr;
+    gap: 1.5rem;
+    padding-block: 2rem;
+    border-top: 1px solid var(--line);
+  }
+  .wn:last-child {
+    border-bottom: 1px solid var(--line);
+  }
+  .wn__key {
+    align-self: start;
+    justify-self: start;
+    padding: 0.35rem 0.7rem;
+    border: 1px solid var(--green-900);
+    border-radius: 999px;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--green-900);
+    transition:
+      background-color 0.4s var(--ease),
+      color 0.4s var(--ease);
+  }
+  .wn:hover .wn__key {
+    background: var(--green-900);
+    color: var(--cream-50);
+  }
+  .wn h3 {
+    font-size: clamp(1.35rem, 2vw, 1.7rem);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+  .wn p {
+    margin-top: 0.7rem;
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+  }
+
+  @media (max-width: 960px) {
+    .whynow__grid {
+      grid-template-columns: 1fr;
+    }
+    .whynow__head {
+      position: static;
+    }
+  }
+  @media (max-width: 520px) {
+    .wn {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+  }
+</style>

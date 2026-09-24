@@ -1,0 +1,118 @@
+---
+import BgLines from './BgLines.astro';
+
+// Documento fundacional, apartado 9.1: cómo evoluciona la relación con un cliente.
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+const stages = [
+  { t: 'Entrada', d: 'Un encargo acotado que resuelve un problema visible y demuestra capacidad.' },
+  { t: 'Ampliación', d: 'El alcance se extiende a otras áreas o procesos de la organización.' },
+  { t: 'Recurrencia', d: 'La relación se convierte en un servicio continuo con dedicación pactada.' },
+  { t: 'Socio estratégico', d: 'Participamos en las decisiones de inversión, expansión y transformación.' },
+];
+---
+<section class="section journey has-bg">
+  <BgLines tone="light" side="left" />
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} La relación</p>
+    <div class="journey__intro">
+      <h2 class="display" data-reveal>Empezamos pequeño. Crecemos cuando el valor está demostrado.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        Nadie tiene que comprometerse con un gran proyecto para empezar. Así suele evolucionar la relación con
+        una organización.
+      </p>
+    </div>
+
+    <ol class="stairs" data-animate>
+      {stages.map((s, i) => (
+        <li class="stair" style={`--i:${i}`}>
+          <span class="stair__num">0{i + 1}</span>
+          <h3>{s.t}</h3>
+          <p>{s.d}</p>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .journey {
+    background: var(--green-900);
+    color: var(--cream-50);
+  }
+  .journey :global(.eyebrow) {
+    color: var(--green-300);
+  }
+  .journey :global(.eyebrow__num) {
+    color: var(--green-600);
+  }
+  .journey .lead {
+    color: var(--green-300);
+  }
+  .journey__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .stairs {
+    list-style: none;
+    margin: clamp(3.5rem, 7vw, 5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    align-items: end;
+    gap: 1rem;
+  }
+  .stair {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: calc(13rem + var(--i) * 4.5rem);
+    padding: 1.5rem 1.4rem 1.75rem;
+    border-top: 2px solid var(--gold-500);
+    background: rgb(245 243 238 / calc(0.03 + var(--i) * 0.03));
+    transform-origin: bottom;
+    transform: scaleY(0.4);
+    opacity: 0;
+    transition:
+      transform 1s var(--ease),
+      opacity 1s var(--ease);
+    transition-delay: calc(0.2s + var(--i) * 0.2s);
+  }
+  .stairs.is-visible .stair {
+    transform: none;
+    opacity: 1;
+  }
+  .stair__num {
+    font-size: 0.72rem;
+    color: var(--gold-300);
+  }
+  .stair h3 {
+    margin-top: 0.6rem;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    font-weight: 400;
+  }
+  .stair p {
+    margin-top: 0.6rem;
+    font-size: 0.92rem;
+    color: var(--green-300);
+  }
+
+  @media (max-width: 860px) {
+    .journey__intro {
+      grid-template-columns: 1fr;
+    }
+    .stairs {
+      grid-template-columns: 1fr;
+    }
+    .stair {
+      min-height: 0;
+      margin-left: calc(var(--i) * 1.25rem);
+    }
+  }
+</style>

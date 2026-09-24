@@ -1,0 +1,182 @@
+---
+// Los cinco problemas estructurales (documento fundacional, apartado 2), como tarjetas que se voltean.
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+const symptoms = [
+  { s: 'Mucha información, poco conocimiento', c: 'Datos dispersos en sistemas que no se hablan entre sí.', q: 'Se dedica más tiempo a construir el dato que a analizarlo.' },
+  { s: 'Inversión tecnológica sin retorno', c: 'Se compra la herramienta antes de definir la pregunta de negocio.', q: 'Licencias infrautilizadas y escepticismo interno.' },
+  { s: 'Decisiones basadas en intuición', c: 'Ausencia de indicadores fiables y compartidos.', q: 'Alta variabilidad en la calidad de las decisiones.' },
+  { s: 'Visión fragmentada', c: 'Negocio, finanzas y tecnología operan en compartimentos.', q: 'Iniciativas que no se traducen en resultado económico.' },
+  { s: 'Gestión reactiva', c: 'Sin capacidad predictiva ni de simulación.', q: 'Se corrige tarde y a mayor coste.' },
+];
+---
+<section class="section symptoms-sec">
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} El punto de partida</p>
+    <div class="sym__intro">
+      <h2 class="display" data-reveal>Cinco problemas que encontramos una y otra vez.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        Ninguno se resuelve comprando una herramienta. Pase el cursor o toque cada tarjeta para ver su causa
+        y su coste real.
+      </p>
+    </div>
+
+    <ol class="sym__grid">
+      {symptoms.map((x, i) => (
+        <li class="sym" data-reveal style={`--d:${i}`}>
+          <button class="sym__card" type="button" aria-pressed="false">
+            <span class="sym__face sym__front">
+              <span class="sym__num">0{i + 1}</span>
+              <span class="sym__title">{x.s}</span>
+              <span class="sym__hint" aria-hidden="true">Causa y consecuencia ↻</span>
+            </span>
+            <span class="sym__face sym__back">
+              <span class="sym__label">Causa</span>
+              <span class="sym__text">{x.c}</span>
+              <span class="sym__label">Consecuencia</span>
+              <span class="sym__text">{x.q}</span>
+            </span>
+          </button>
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.sym__card').forEach((card) => {
+    card.addEventListener('click', () => {
+      const on = card.getAttribute('aria-pressed') !== 'true';
+      card.setAttribute('aria-pressed', String(on));
+    });
+  });
+</script>
+
+<style>
+  .symptoms-sec {
+    background: var(--cream-100);
+  }
+  .sym__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .sym__grid {
+    list-style: none;
+    margin: clamp(3rem, 6vw, 4.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  .sym__card {
+    position: relative;
+    display: block;
+    width: 100%;
+    min-height: 19rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    text-align: left;
+    cursor: pointer;
+    perspective: 1000px;
+  }
+  .sym__face {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem 1.35rem;
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    transition: transform 0.8s var(--ease);
+  }
+  .sym__front {
+    background: var(--cream-50);
+    border: 1px solid var(--line);
+  }
+  .sym__back {
+    background: var(--green-900);
+    color: var(--cream-50);
+    transform: rotateY(180deg);
+    gap: 0.4rem;
+  }
+  .sym__card:hover .sym__front,
+  .sym__card:focus-visible .sym__front,
+  .sym__card[aria-pressed='true'] .sym__front {
+    transform: rotateY(-180deg);
+  }
+  .sym__card:hover .sym__back,
+  .sym__card:focus-visible .sym__back,
+  .sym__card[aria-pressed='true'] .sym__back {
+    transform: rotateY(0deg);
+  }
+  .sym__num {
+    font-family: var(--serif);
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1;
+    color: var(--gold-500);
+  }
+  .sym__title {
+    margin-top: auto;
+    font-family: var(--serif);
+    font-size: 1.4rem;
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .sym__hint {
+    margin-top: 1rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--ink-mute);
+  }
+  .sym__label {
+    font-size: 0.66rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-300);
+  }
+  .sym__label:not(:first-child) {
+    margin-top: 1rem;
+  }
+  .sym__text {
+    font-size: 0.92rem;
+    line-height: 1.45;
+    color: var(--cream-50);
+  }
+
+  @media (max-width: 1100px) {
+    .sym__grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .sym__intro {
+      grid-template-columns: 1fr;
+    }
+    .sym__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 520px) {
+    .sym__grid {
+      grid-template-columns: 1fr;
+    }
+    .sym__card {
+      min-height: 15rem;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .sym__face {
+      transition: none;
+    }
+  }
+</style>

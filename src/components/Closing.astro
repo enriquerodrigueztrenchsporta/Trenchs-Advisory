@@ -1,6 +1,16 @@
 ---
 import { DIAGNOSIS_MAILTO } from '../consts';
 
+interface Props {
+  kicker?: string;
+  title?: string;
+  text?: string;
+}
+const {
+  kicker = 'Primer paso',
+  title = 'Hablemos de la decisión que hoy le quita más tiempo.',
+  text = 'Una primera conversación para entender su organización, sus decisiones críticas y el estado real de su información. Sin coste ni compromiso.',
+} = Astro.props;
 ---
 <section class="closing">
   <div class="container closing__inner">
@@ -9,14 +19,9 @@ import { DIAGNOSIS_MAILTO } from '../consts';
         <path d={`M0 ${40 + i * 40} C400 ${40 + i * 40} 700 200 1200 200`} pathLength="1" style={`--i:${i}`} />
       ))}
     </svg>
-    <p class="closing__kicker" data-reveal>Primer paso</p>
-    <h2 class="closing__title" data-reveal style="--d:1">
-      Hablemos de la decisión que hoy le quita más tiempo.
-    </h2>
-    <p class="closing__text" data-reveal style="--d:2">
-      Una primera conversación para entender su organización, sus decisiones críticas y el estado real de
-      su información. Sin coste ni compromiso.
-    </p>
+    <p class="closing__kicker" data-reveal>{kicker}</p>
+    <h2 class="closing__title" data-reveal style="--d:1">{title}</h2>
+    <p class="closing__text" data-reveal style="--d:2">{text}</p>
     <div class="closing__actions" data-reveal style="--d:3">
       <a class="btn btn--light" href={DIAGNOSIS_MAILTO}>
         Solicitar diagnóstico <span class="btn__arrow" aria-hidden="true">→</span>

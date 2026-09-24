@@ -3,9 +3,8 @@ import BgLines from './BgLines.astro';
 
 interface Props {
   num?: string;
-  symptoms?: boolean;
 }
-const { num, symptoms: showSymptoms = false } = Astro.props;
+const { num } = Astro.props;
 
 // Trazos dispersos que, al entrar en pantalla, se ordenan en una sola visión.
 let seed = 7;
@@ -30,13 +29,6 @@ const labels = [
   { t: 'Mercado', x: 176, y: 330 },
 ];
 
-const symptoms = [
-  ['Mucha información, poco conocimiento', 'Datos dispersos en sistemas que no se hablan entre sí', 'Se dedica más tiempo a construir el dato que a analizarlo'],
-  ['Inversión tecnológica sin retorno', 'Se compra la herramienta antes de definir la pregunta de negocio', 'Licencias infrautilizadas y escepticismo interno'],
-  ['Decisiones basadas en intuición', 'Ausencia de indicadores fiables y compartidos', 'Alta variabilidad en la calidad de las decisiones'],
-  ['Visión fragmentada', 'Negocio, finanzas y tecnología operan en compartimentos', 'Iniciativas que no se traducen en resultado económico'],
-  ['Gestión reactiva', 'Sin capacidad predictiva ni de simulación', 'Se corrige tarde y a mayor coste'],
-];
 ---
 <section class="section problem has-bg" id="enfoque">
   <BgLines side="left" />
@@ -76,26 +68,6 @@ const symptoms = [
       </div>
     </div>
 
-    {showSymptoms && (<>
-    <div class="symptoms" role="table" aria-label="Cinco problemas estructurales">
-      <div class="symptoms__head" role="row">
-        <span role="columnheader">Síntoma</span>
-        <span role="columnheader">Causa de fondo</span>
-        <span role="columnheader">Consecuencia</span>
-      </div>
-      {symptoms.map(([s, c, q], i) => (
-        <div class="symptoms__row" role="row" data-reveal style={`--d:${i}`}>
-          <span class="symptoms__name" role="cell"><em>0{i + 1}</em>{s}</span>
-          <span role="cell"><b class="symptoms__tag">Causa</b>{c}</span>
-          <span role="cell"><b class="symptoms__tag">Consecuencia</b>{q}</span>
-        </div>
-      ))}
-    </div>
-    <p class="symptoms__close" data-reveal>
-      Ninguno se resuelve con una herramienta. Todos se resuelven con un método:{" "}
-      <strong>traducir la pregunta de negocio en información, y la información en una decisión ejecutable.</strong>
-    </p>
-    </>)}
   </div>
 </section>
 
@@ -192,64 +164,6 @@ const symptoms = [
     margin-top: 1.75rem;
   }
 
-  .symptoms {
-    margin-top: clamp(4rem, 8vw, 6.5rem);
-    border-top: 1px solid var(--ink);
-  }
-  .symptoms__head,
-  .symptoms__row {
-    display: grid;
-    grid-template-columns: 1.1fr 1fr 1fr;
-    gap: 2rem;
-    padding-block: 1.35rem;
-    border-bottom: 1px solid var(--line);
-  }
-  .symptoms__head {
-    font-size: 0.72rem;
-    font-weight: 500;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--ink-mute);
-    padding-block: 1rem;
-  }
-  .symptoms__row {
-    font-size: 0.97rem;
-    color: var(--ink-soft);
-    transition: background-color 0.4s var(--ease);
-  }
-  .symptoms__row:hover {
-    background: color-mix(in srgb, var(--cream-200) 55%, transparent);
-  }
-  .symptoms__name {
-    font-family: var(--serif);
-    font-size: 1.35rem;
-    line-height: 1.2;
-    color: var(--ink);
-    display: flex;
-    gap: 1rem;
-  }
-  .symptoms__name em {
-    font-style: normal;
-    font-family: var(--sans);
-    font-size: 0.72rem;
-    color: var(--gold-500);
-    padding-top: 0.45rem;
-  }
-  .symptoms__tag {
-    display: none;
-  }
-  .symptoms__close {
-    margin-top: 2.5rem;
-    max-width: 48rem;
-    font-family: var(--serif);
-    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
-    line-height: 1.35;
-    color: var(--ink-soft);
-  }
-  .symptoms__close strong {
-    font-weight: 400;
-    color: var(--ink);
-  }
 
   @media (max-width: 900px) {
     .problem__grid {
@@ -257,21 +171,6 @@ const symptoms = [
     }
     .problem__copy {
       order: -1;
-    }
-    .symptoms__head {
-      display: none;
-    }
-    .symptoms__row {
-      grid-template-columns: 1fr;
-      gap: 0.6rem;
-    }
-    .symptoms__tag {
-      display: block;
-      font-size: 0.68rem;
-      font-weight: 500;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--ink-mute);
     }
   }
 </style>
