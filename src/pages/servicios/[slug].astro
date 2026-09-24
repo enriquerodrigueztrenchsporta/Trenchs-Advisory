@@ -1,0 +1,336 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/PageHero.astro';
+import Method from '../../components/Method.astro';
+import BgLines from '../../components/BgLines.astro';
+import { url } from '../../consts';
+import { SERVICES, QUESTIONS, type Service } from '../../data/services';
+
+export function getStaticPaths() {
+  return SERVICES.map((service, index) => ({ params: { slug: service.slug }, props: { service, index } }));
+}
+
+interface Props {
+  service: Service;
+  index: number;
+}
+const { service, index } = Astro.props;
+const others = SERVICES.filter((s) => s.slug !== service.slug);
+---
+<Page title={`${service.name} · Trenchs Advisory`} description={service.intro}>
+  <PageHero kicker={`Servicios · 0${index + 1}`} title={service.name} lead={service.intro} />
+
+  <section class="section q has-bg">
+    <BgLines side="right" />
+    <div class="container q__grid">
+      <div>
+        <p class="eyebrow" data-reveal>{service.questions.length > 1 ? 'Las preguntas que responde' : 'La pregunta que responde'}</p>
+        <h2 class="display q__title" data-reveal>
+          {service.questions.map((qi) => <span class="q__line">{QUESTIONS[qi].q}</span>)}
+        </h2>
+        <p class="lead q__lead" data-reveal style="--d:1">{service.claim}</p>
+      </div>
+      <ol class="qmap" data-animate aria-label="Las cinco preguntas">
+        {QUESTIONS.map((q, i) => (
+          <li class:list={['qmap__item', { 'is-on': service.questions.includes(i) }]} style={`--i:${i}`}>
+            <span class="qmap__dot" aria-hidden="true"></span>
+            <span class="qmap__num">0{i + 1}</span>
+            <span class="qmap__q">{q.q}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+
+  <section class="section what">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Qué hacemos</p>
+      <h2 class="display what__title" data-reveal>Servicios, entregables y beneficio para su organización.</h2>
+      <div class="table" role="table" aria-label={`Servicios de ${service.name}`}>
+        <div class="table__head" role="row">
+          <span role="columnheader">Servicio</span>
+          <span role="columnheader">Entregable</span>
+          <span role="columnheader">Beneficio</span>
+        </div>
+        {service.rows.map(([s, e, b], i) => (
+          <div class="table__row" role="row" data-reveal style={`--d:${i}`}>
+            <span class="table__name" role="cell"><em>0{i + 1}</em>{s}</span>
+            <span role="cell"><b class="table__tag">Entregable</b>{e}</span>
+            <span class="table__benefit" role="cell"><b class="table__tag">Beneficio</b>{b}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <Method compact />
+
+  <section class="section others">
+    <div class="container">
+      <p class="eyebrow" data-reveal>Otras capacidades</p>
+      <ul class="others__grid">
+        {others.map((o, i) => (
+          <li data-reveal style={`--d:${i}`}>
+            <a class="other" href={url(`servicios/${o.slug}`)}>
+              <span class="other__name">{o.name}</span>
+              <span class="other__sub">{o.subtitle}</span>
+              <span class="other__arrow" aria-hidden="true">→</span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Page>
+
+<style>
+  .q {
+    background: var(--cream-100);
+  }
+  .q__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .q__title {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+  }
+  .q__line {
+    display: block;
+  }
+  .q__lead {
+    margin-top: 1.5rem;
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2vw, 1.6rem);
+    color: var(--green-600);
+  }
+  .qmap {
+    list-style: none;
+    margin: 0;
+    padding: 0 0 0 1.5rem;
+    position: relative;
+  }
+  .qmap::before {
+    content: '';
+    position: absolute;
+    left: calc(1.5rem + 0.45rem);
+    top: 1.4rem;
+    bottom: 1.4rem;
+    width: 1px;
+    background: var(--line);
+  }
+  .qmap__item {
+    position: relative;
+    display: grid;
+    grid-template-columns: 0.9rem 2rem 1fr;
+    align-items: baseline;
+    gap: 1rem;
+    padding-block: 0.85rem;
+    color: var(--ink-mute);
+    opacity: 0;
+    transform: translateX(10px);
+    transition:
+      opacity 0.7s var(--ease),
+      transform 0.7s var(--ease);
+    transition-delay: calc(0.2s + var(--i) * 0.12s);
+  }
+  .qmap__dot {
+    width: 0.9rem;
+    height: 0.9rem;
+    border-radius: 50%;
+    border: 1px solid var(--ink-mute);
+    background: var(--cream-100);
+    align-self: center;
+    position: relative;
+  }
+  .qmap__num {
+    font-size: 0.72rem;
+  }
+  .qmap__q {
+    font-family: var(--serif);
+    font-size: clamp(1.15rem, 1.7vw, 1.4rem);
+  }
+  .qmap__item.is-on {
+    color: var(--ink);
+  }
+  .qmap__item.is-on .qmap__dot {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+  }
+  .qmap__item.is-on .qmap__dot::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-500);
+    animation: qpulse 2.4s var(--ease) infinite 1.4s;
+  }
+  @keyframes qpulse {
+    0% {
+      transform: scale(0.8);
+      opacity: 1;
+    }
+    100% {
+      transform: scale(1.9);
+      opacity: 0;
+    }
+  }
+  .qmap.is-visible .qmap__item {
+    opacity: 1;
+    transform: none;
+  }
+
+  .what__title {
+    margin-top: clamp(1.5rem, 3vw, 2.25rem);
+    max-width: 50rem;
+  }
+  .table {
+    margin-top: clamp(3rem, 6vw, 4.5rem);
+    border-top: 1px solid var(--ink);
+  }
+  .table__head,
+  .table__row {
+    display: grid;
+    grid-template-columns: 1.1fr 1.2fr 1fr;
+    gap: 2rem;
+    padding: 1.4rem 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .table__head {
+    padding-block: 1rem;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+  }
+  .table__row {
+    position: relative;
+    color: var(--ink-soft);
+    font-size: 0.97rem;
+    isolation: isolate;
+  }
+  .table__row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cream-100);
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.45s var(--ease);
+    z-index: -1;
+  }
+  .table__row:hover::before {
+    transform: scaleY(1);
+  }
+  .table__name {
+    display: flex;
+    gap: 1rem;
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    color: var(--ink);
+  }
+  .table__name em {
+    font-style: normal;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    color: var(--gold-500);
+    padding-top: 0.45rem;
+  }
+  .table__benefit {
+    color: var(--green-900);
+    font-weight: 500;
+  }
+  .table__tag {
+    display: none;
+  }
+
+  .others {
+    background: var(--cream-100);
+  }
+  .others__grid {
+    list-style: none;
+    margin: 2rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .other {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    height: 100%;
+    padding: 1.75rem 1.5rem 3.5rem;
+    background: var(--cream-50);
+    border: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    transition:
+      transform 0.5s var(--ease),
+      border-color 0.5s var(--ease),
+      box-shadow 0.5s var(--ease);
+  }
+  .other:hover {
+    transform: translateY(-5px);
+    border-color: var(--gold-300);
+    box-shadow: 0 24px 40px -28px rgb(31 58 51 / 0.35);
+  }
+  .other__name {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    line-height: 1.15;
+  }
+  .other__sub {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .other__arrow {
+    position: absolute;
+    left: 1.5rem;
+    bottom: 1.25rem;
+    color: var(--gold-500);
+    transition: transform 0.4s var(--ease);
+  }
+  .other:hover .other__arrow {
+    transform: translateX(6px);
+  }
+
+  @media (max-width: 960px) {
+    .q__grid {
+      grid-template-columns: 1fr;
+    }
+    .others__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+    .table__head {
+      display: none;
+    }
+    .table__row {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .table__tag {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+  }
+  @media (max-width: 520px) {
+    .others__grid {
+      grid-template-columns: 1fr;
+    }
+    .qmap {
+      padding-left: 0;
+    }
+    .qmap::before {
+      left: 0.45rem;
+    }
+  }
+</style>

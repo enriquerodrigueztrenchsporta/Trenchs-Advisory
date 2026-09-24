@@ -1,0 +1,92 @@
+---
+import Logo from './Logo.astro';
+import { EMAIL, url } from '../consts';
+import { SERVICES, FIRMA_NAV } from '../data/services';
+
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="container footer__inner">
+    <div class="footer__brand">
+      <Logo inverse />
+      <p>Decisiones más inteligentes.<br />Organizaciones más competitivas.</p>
+    </div>
+    <nav class="footer__col" aria-label="Servicios">
+      <span class="footer__title">Servicios</span>
+      {SERVICES.map((s) => <a href={url(`servicios/${s.slug}`)}>{s.name}</a>)}
+    </nav>
+    <nav class="footer__col" aria-label="La firma">
+      <span class="footer__title">La firma</span>
+      {FIRMA_NAV.map((f) => <a href={url(f.path)}>{f.name}</a>)}
+    </nav>
+    <div class="footer__col">
+      <span class="footer__title">Contacto</span>
+      <a href={`mailto:${EMAIL}`}>{EMAIL}</a>
+    </div>
+  </div>
+  <div class="container footer__legal">
+    <span>© {year} Trenchs Advisory</span>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--green-900);
+    color: var(--green-300);
+    font-size: 0.9rem;
+  }
+  .footer__inner {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr 1fr 1fr;
+    gap: 2.5rem;
+    padding-block: 4rem 3rem;
+  }
+  .footer__brand p {
+    margin-top: 1.5rem;
+    font-family: var(--serif);
+    font-size: 1.15rem;
+    line-height: 1.35;
+    color: var(--cream-50);
+  }
+  .footer__col {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.6rem;
+  }
+  .footer__title {
+    margin-bottom: 0.3rem;
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-300);
+  }
+  .footer a {
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: color 0.3s var(--ease);
+  }
+  .footer a:hover {
+    color: var(--cream-50);
+  }
+  .footer__legal {
+    padding-block: 1.5rem 2rem;
+    border-top: 1px solid rgb(245 243 238 / 0.12);
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 900px) {
+    .footer__inner {
+      grid-template-columns: 1fr 1fr;
+    }
+    .footer__brand {
+      grid-column: 1 / -1;
+    }
+  }
+  @media (max-width: 520px) {
+    .footer__inner {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

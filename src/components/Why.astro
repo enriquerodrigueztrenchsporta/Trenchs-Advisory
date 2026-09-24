@@ -1,0 +1,158 @@
+---
+import BgLines from './BgLines.astro';
+
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+const featured = {
+  t: 'A la medida de cada organización',
+  d: 'Adaptamos el alcance, el ritmo y la forma de colaborar al tamaño, al contexto y a las herramientas de cada cliente. No aplicamos soluciones de catálogo.',
+};
+const reasons = [
+  { t: 'Un único interlocutor', d: 'De la primera reunión a la entrega. Quien entiende el problema es quien lo resuelve y quien responde.' },
+  { t: 'Negocio, finanzas y tecnología a la vez', d: 'Traducimos la necesidad de la dirección en una solución técnica sin pérdidas por el camino.' },
+  { t: 'Independencia de fabricante', d: 'Sin comisiones. Recomendamos la herramienta que conviene al cliente, no la que conviene al proveedor.' },
+  { t: 'Pragmatismo', d: 'Antes un cuadro de mando en producción en seis semanas que una arquitectura perfecta en dieciocho meses.' },
+  { t: 'Rigor analítico', d: 'Toda cifra que entregamos es trazable hasta su fuente y reproducible.' },
+  { t: 'Transferencia de capacidad', d: 'Cada organización debe quedar más autónoma después del proyecto, no más dependiente.' },
+];
+---
+<section class="section why has-bg" id="por-que">
+  <BgLines tone="light" side="right" />
+  <div class="container why__grid">
+    <div class="why__head">
+      <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Por qué nosotros</p>
+      <h2 class="display" data-reveal>El diferencial no es la herramienta. Es el criterio.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        No vendemos Power BI, ni inteligencia artificial, ni automatizaciones. Integramos las disciplinas que la
+        mayoría de proveedores ofrece por separado, con estructura ligera y sin intermediarios.
+      </p>
+    </div>
+    <div>
+      <div class="featured" data-reveal>
+        <span class="reason__num">01</span>
+        <h3>{featured.t}</h3>
+        <p>{featured.d}</p>
+      </div>
+      <ul class="reasons">
+        {reasons.map((r, i) => (
+          <li class="reason" data-reveal style={`--d:${i % 2}`}>
+            <span class="reason__num">0{i + 2}</span>
+            <h3>{r.t}</h3>
+            <p>{r.d}</p>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .why {
+    background: var(--green-900);
+    color: var(--cream-50);
+  }
+  .why :global(.eyebrow) {
+    color: var(--green-300);
+  }
+  .why :global(.eyebrow__num) {
+    color: var(--green-600);
+  }
+  .why .lead {
+    color: var(--green-300);
+    margin-top: 1.75rem;
+  }
+  .why__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+    gap: clamp(3rem, 7vw, 7rem);
+    align-items: start;
+  }
+  .why__head {
+    position: sticky;
+    top: 7rem;
+  }
+  .why__head h2 {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .featured {
+    position: relative;
+    padding: 2rem 2rem 2.25rem;
+    background: rgb(245 243 238 / 0.05);
+    border: 1px solid rgb(212 183 120 / 0.35);
+    overflow: hidden;
+  }
+  .featured::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 2px;
+    width: 100%;
+    background: var(--gold-500);
+    transform-origin: left;
+    animation: grow 1.4s var(--ease) both 0.4s;
+  }
+  @keyframes grow {
+    from {
+      transform: scaleX(0);
+    }
+  }
+  .featured h3 {
+    margin-top: 1rem;
+    font-size: clamp(1.6rem, 2.6vw, 2.2rem);
+    font-weight: 400;
+    line-height: 1.1;
+  }
+  .featured p {
+    margin-top: 0.9rem;
+    color: var(--green-300);
+    max-width: 34rem;
+  }
+  .reasons {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 2.5rem;
+  }
+  .reason {
+    padding-block: 2rem 2.25rem;
+    border-top: 1px solid rgb(245 243 238 / 0.16);
+  }
+  .reason__num {
+    font-size: 0.72rem;
+    color: var(--gold-300);
+  }
+  .reason h3 {
+    margin-top: 1rem;
+    font-size: clamp(1.35rem, 2vw, 1.65rem);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+  .reason p {
+    margin-top: 0.75rem;
+    font-size: 0.95rem;
+    color: var(--green-300);
+  }
+
+  @media (max-width: 960px) {
+    .why__grid {
+      grid-template-columns: 1fr;
+    }
+    .why__head {
+      position: static;
+    }
+  }
+  @media (max-width: 600px) {
+    .reasons {
+      grid-template-columns: 1fr;
+    }
+    .featured {
+      padding: 1.5rem 1.25rem 1.75rem;
+    }
+  }
+</style>

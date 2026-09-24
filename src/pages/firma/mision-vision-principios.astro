@@ -1,0 +1,202 @@
+---
+import Page from '../../layouts/Page.astro';
+import PageHero from '../../components/PageHero.astro';
+import BgLines from '../../components/BgLines.astro';
+
+// Documento fundacional, apartado 3.
+const confluences = [
+  'Datos e información',
+  'Rendimiento económico y financiero',
+  'Tecnología y arquitectura de sistemas',
+  'Eficiencia operativa',
+  'Transformación organizativa y cultural',
+];
+const principles = [
+  { t: 'Negocio primero', d: 'Ninguna solución técnica se propone sin una pregunta de negocio y un impacto económico asociado.' },
+  { t: 'Independencia tecnológica', d: 'No hay comisiones de fabricante: se recomienda la herramienta que conviene al cliente, no la que conviene al proveedor.' },
+  { t: 'Rigor analítico', d: 'Toda cifra entregada es trazable hasta su fuente y reproducible.' },
+  { t: 'Transferencia de capacidad', d: 'El cliente debe quedar más autónomo después del proyecto, no más dependiente.' },
+  { t: 'Pragmatismo', d: 'Antes un cuadro de mando en producción en seis semanas que una arquitectura perfecta en dieciocho meses.' },
+  { t: 'Confidencialidad y gobierno del dato', d: 'Tratamiento de la información conforme a normativa y con criterios de seguridad desde el diseño.' },
+];
+---
+<Page
+  title="Misión, visión y principios · Trenchs Advisory"
+  description="Transformar la incertidumbre en estrategia, los datos en oportunidades y la tecnología en una ventaja competitiva real y sostenible."
+>
+  <PageHero
+    kicker="La firma · Misión, visión y principios"
+    title="Lo que guía cada decisión y cada proyecto."
+  />
+
+  <section class="section mission has-bg">
+    <BgLines side="right" />
+    <div class="container">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">01</span> Misión</p>
+      <blockquote class="mission__quote" data-reveal style="--d:1">
+        Ayudar a empresas y administraciones públicas a transformar
+        <em>la incertidumbre en estrategia</em>, <em>los datos en oportunidades</em> y
+        <em>la tecnología en una ventaja competitiva</em> real y sostenible.
+      </blockquote>
+    </div>
+  </section>
+
+  <section class="section vision has-bg bg-grid" style="--grid-x:25%; --grid-y:60%">
+    <div class="container vision__grid">
+      <div>
+        <p class="eyebrow" data-reveal><span class="eyebrow__num">02</span> Visión</p>
+        <h2 class="display vision__title" data-reveal>El socio estratégico en las decisiones que importan.</h2>
+        <p class="lead vision__lead" data-reveal style="--d:1">
+          Convertirnos en la firma de referencia para la toma de decisiones basada en datos, integrando
+          estrategia, finanzas, tecnología e inteligencia artificial para impulsar la competitividad y la
+          sostenibilidad de organizaciones públicas y privadas.
+        </p>
+      </div>
+      <div class="confluence" data-animate>
+        <p class="confluence__label">Acompañamos las decisiones donde confluyen</p>
+        <ul>
+          {confluences.map((c, i) => (
+            <li style={`--i:${i}`}><span class="confluence__dot"></span>{c}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="section principles">
+    <div class="container">
+      <p class="eyebrow" data-reveal><span class="eyebrow__num">03</span> Principios de actuación</p>
+      <h2 class="display principles__title" data-reveal>Seis principios, sin excepciones.</h2>
+      <ol class="principles__grid">
+        {principles.map((p, i) => (
+          <li class="principle" data-reveal style={`--d:${i % 3}`}>
+            <span class="principle__num">0{i + 1}</span>
+            <h3>{p.t}</h3>
+            <p>{p.d}</p>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </section>
+</Page>
+
+<style>
+  .mission {
+    background: var(--cream-100);
+  }
+  .mission__quote {
+    margin: clamp(2rem, 4vw, 3rem) 0 0;
+    max-width: 62rem;
+    font-family: var(--serif);
+    font-size: clamp(2rem, 4.2vw, 3.6rem);
+    font-weight: 300;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+  .mission__quote em {
+    font-style: italic;
+    color: var(--green-600);
+  }
+
+  .vision__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+  }
+  .vision__title {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .vision__lead {
+    margin-top: 1.75rem;
+  }
+  .confluence {
+    padding: 2.25rem;
+    background: var(--green-900);
+    color: var(--cream-50);
+  }
+  .confluence__label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold-300);
+  }
+  .confluence ul {
+    list-style: none;
+    margin: 1.5rem 0 0;
+    padding: 0;
+  }
+  .confluence li {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-block: 1rem;
+    border-top: 1px solid rgb(245 243 238 / 0.14);
+    font-family: var(--serif);
+    font-size: clamp(1.2rem, 1.8vw, 1.45rem);
+    opacity: 0;
+    transform: translateX(-12px);
+    transition:
+      opacity 0.7s var(--ease),
+      transform 0.7s var(--ease);
+    transition-delay: calc(0.3s + var(--i) * 0.14s);
+  }
+  .confluence__dot {
+    width: 0.5rem;
+    height: 0.5rem;
+    flex: none;
+    background: var(--gold-500);
+  }
+  .confluence.is-visible li {
+    opacity: 1;
+    transform: none;
+  }
+
+  .principles__title {
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .principles__grid {
+    list-style: none;
+    margin: clamp(3rem, 6vw, 4.5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border-top: 1px solid var(--ink);
+  }
+  .principle {
+    padding: 2rem 2rem 2.5rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .principle__num {
+    font-size: 0.72rem;
+    color: var(--gold-500);
+  }
+  .principle h3 {
+    margin-top: 1rem;
+    font-size: clamp(1.4rem, 2vw, 1.75rem);
+    font-weight: 400;
+  }
+  .principle p {
+    margin-top: 0.8rem;
+    font-size: 0.95rem;
+    color: var(--ink-soft);
+  }
+
+  @media (max-width: 960px) {
+    .vision__grid {
+      grid-template-columns: 1fr;
+    }
+    .principles__grid {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+  @media (max-width: 600px) {
+    .principles__grid {
+      grid-template-columns: 1fr;
+    }
+    .confluence {
+      padding: 1.75rem 1.25rem;
+    }
+  }
+</style>

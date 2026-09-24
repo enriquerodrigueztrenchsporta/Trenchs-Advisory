@@ -1,0 +1,6 @@
+node_modules/
+dist/
+.astro/
+# Documentos internos: no se publican
+Bases_Trenchs_Advisory.docx
+Ejemplo/

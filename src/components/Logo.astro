@@ -1,0 +1,59 @@
+---
+import LogoMark from './LogoMark.astro';
+
+interface Props {
+  inverse?: boolean;
+}
+const { inverse = false } = Astro.props;
+---
+<a href={import.meta.env.BASE_URL} class:list={['logo', { 'logo--inverse': inverse }]} aria-label="Trenchs Advisory, inicio">
+  <LogoMark class="logo__mark" mono={inverse} />
+  <span class="logo__type">
+    <span class="logo__name">Trenchs</span>
+    <span class="logo__sub">Advisory</span>
+  </span>
+</a>
+
+<style>
+  .logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.85rem;
+    color: var(--green-900);
+    text-decoration: none;
+  }
+  .logo :global(.logo__mark) {
+    width: 2.6rem;
+    height: 2.6rem;
+    flex: none;
+    transition: width 0.4s var(--ease), height 0.4s var(--ease);
+  }
+  .logo__type {
+    display: flex;
+    flex-direction: column;
+    line-height: 1;
+    font-family: var(--sans);
+    text-transform: uppercase;
+  }
+  .logo__name {
+    font-size: 0.95rem;
+    font-weight: 400;
+    letter-spacing: 0.32em;
+  }
+  .logo__sub {
+    margin-top: 0.4rem;
+    font-size: 0.55rem;
+    letter-spacing: 0.42em;
+    color: var(--green-600);
+  }
+  .logo--inverse {
+    color: var(--cream-50);
+  }
+  .logo--inverse .logo__sub {
+    color: var(--gold-300);
+  }
+  :global(.header.is-compact) .logo :global(.logo__mark) {
+    width: 2.2rem;
+    height: 2.2rem;
+  }
+</style>

@@ -1,0 +1,356 @@
+---
+import BgLines from './BgLines.astro';
+import { url } from '../consts';
+import { SERVICES } from '../data/services';
+
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+// Diagrama radial: cinco capacidades alrededor de "Mejores decisiones".
+const C = 220;
+const R = 165;
+const nodes = SERVICES.map((s, i) => {
+  const a = (-90 + i * 72) * (Math.PI / 180);
+  return { ...s, i, x: C + R * Math.cos(a), y: C + R * Math.sin(a), cos: Math.cos(a), sin: Math.sin(a) };
+});
+---
+<section class="section caps has-bg" id="servicios">
+  <BgLines side="left" />
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Capacidades</p>
+
+    <div class="caps__grid" data-caps>
+      <div>
+        <h2 class="display" data-reveal>Cinco capacidades. Un mismo objetivo.</h2>
+        <p class="lead caps__lead" data-reveal style="--d:1">
+          El mercado ya ofrece cada disciplina por separado. Nuestro valor está en articularlas bajo un único
+          responsable y una sola lógica económica.
+        </p>
+        <ol class="caps__list">
+          {SERVICES.map((s, i) => (
+            <li data-reveal style={`--d:${i}`}>
+              <a class="cap" href={url(`servicios/${s.slug}`)} data-cap={i}>
+                <span class="cap__num">0{i + 1}</span>
+                <span class="cap__text">
+                  <span class="cap__name">{s.name}</span>
+                  <span class="cap__sub">{s.subtitle}</span>
+                </span>
+                <span class="cap__arrow" aria-hidden="true">→</span>
+              </a>
+            </li>
+          ))}
+        </ol>
+      </div>
+
+      <figure class="radial" data-animate aria-hidden="true">
+        <div class="radial__box">
+        <svg viewBox="0 0 440 440">
+          <circle class="radial__orbit" cx={C} cy={C} r="112" />
+          <circle class="radial__outer" cx={C} cy={C} r={R} pathLength="1" />
+          <g class="radial__spokes">
+            {nodes.map((n) => (
+              <line x1={n.x} y1={n.y} x2={C} y2={C} pathLength="1" data-node={n.i} style={`--i:${n.i}`} />
+            ))}
+          </g>
+          <g class="radial__pulses">
+            {nodes.map((n) => (
+              <line x1={n.x} y1={n.y} x2={C} y2={C} pathLength="1" style={`--i:${n.i}`} />
+            ))}
+          </g>
+          <circle class="radial__core" cx={C} cy={C} r="62" />
+          {nodes.map((n) => (
+            <rect class="radial__node" x={n.x - 5} y={n.y - 5} width="10" height="10" data-node={n.i} style={`--i:${n.i}`} />
+          ))}
+        </svg>
+        <span class="radial__center">Mejores<br />decisiones</span>
+        {nodes.map((n) => (
+          <span
+            class="radial__label"
+            data-node={n.i}
+            style={`left:${((n.x + n.cos * 26) / 440) * 100}%; top:${((n.y + n.sin * 26) / 440) * 100}%; --tx:${n.cos > 0.3 ? '0%' : n.cos < -0.3 ? '-100%' : '-50%'}; --ty:${n.sin < -0.5 ? '-100%' : n.sin > 0.5 ? '0%' : '-50%'}; --i:${n.i}`}
+          >
+            <em>0{n.i + 1}</em>{n.name}
+          </span>
+        ))}
+        </div>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-caps]').forEach((root) => {
+    const figure = root.querySelector<HTMLElement>('.radial')!;
+    root.querySelectorAll<HTMLElement>('[data-cap]').forEach((a) => {
+      const on = () => figure.setAttribute('data-active', a.dataset.cap!);
+      const off = () => figure.removeAttribute('data-active');
+      a.addEventListener('pointerenter', on);
+      a.addEventListener('focus', on);
+      a.addEventListener('pointerleave', off);
+      a.addEventListener('blur', off);
+    });
+  });
+</script>
+
+<style>
+  .caps__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: clamp(3rem, 6vw, 6rem);
+    align-items: center;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .caps__lead {
+    margin-top: 1.5rem;
+  }
+  .caps__list {
+    list-style: none;
+    margin: 2.5rem 0 0;
+    padding: 0;
+    border-top: 1px solid var(--ink);
+  }
+  .cap {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.1rem 0.25rem;
+    border-bottom: 1px solid var(--line);
+    text-decoration: none;
+    color: var(--ink);
+    position: relative;
+    isolation: isolate;
+    transition: padding 0.45s var(--ease);
+  }
+  .cap::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--cream-100);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.5s var(--ease);
+    z-index: -1;
+  }
+  .cap:hover,
+  .cap:focus-visible {
+    padding-left: 1rem;
+  }
+  .cap:hover::before,
+  .cap:focus-visible::before {
+    transform: scaleX(1);
+  }
+  .cap__num {
+    font-size: 0.75rem;
+    color: var(--gold-500);
+  }
+  .cap__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .cap__name {
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 1.8vw, 1.5rem);
+    line-height: 1.2;
+  }
+  .cap__sub {
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .cap__arrow {
+    color: var(--green-900);
+    transition: transform 0.4s var(--ease);
+  }
+  .cap:hover .cap__arrow {
+    transform: translateX(6px);
+  }
+
+  /* Diagrama radial */
+  .radial {
+    position: relative;
+    margin: 0;
+    width: 100%;
+    max-width: 520px;
+    justify-self: center;
+  }
+  .radial__box {
+    position: relative;
+  }
+  .radial svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .radial__orbit {
+    fill: none;
+    stroke: var(--gold-500);
+    stroke-width: 1;
+    stroke-dasharray: 2 7;
+    opacity: 0.6;
+    transform-origin: 220px 220px;
+    animation: spin 60s linear infinite;
+  }
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  .radial__outer {
+    fill: none;
+    stroke: var(--line);
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 2s var(--ease) 0.2s;
+  }
+  .radial__spokes line {
+    stroke: var(--ink-soft);
+    stroke-width: 1;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition:
+      stroke-dashoffset 1.2s var(--ease),
+      stroke 0.4s var(--ease),
+      stroke-width 0.4s var(--ease);
+    transition-delay: calc(0.6s + var(--i) * 0.15s), 0s, 0s;
+  }
+  .radial__pulses line {
+    stroke: var(--gold-500);
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 0.08 1.2;
+    stroke-dashoffset: 0.08;
+    opacity: 0;
+  }
+  .radial.is-visible .radial__pulses line {
+    animation: flow 3.6s cubic-bezier(0.45, 0, 0.25, 1) infinite;
+    animation-delay: calc(2.2s + var(--i) * 0.72s);
+  }
+  @keyframes flow {
+    0% {
+      stroke-dashoffset: 0.08;
+      opacity: 0;
+    }
+    10% {
+      opacity: 1;
+    }
+    60% {
+      stroke-dashoffset: -0.85;
+      opacity: 1;
+    }
+    70%,
+    100% {
+      stroke-dashoffset: -0.9;
+      opacity: 0;
+    }
+  }
+  .radial__core {
+    fill: var(--cream-50);
+    stroke: var(--green-900);
+    stroke-width: 1;
+    transform-origin: 220px 220px;
+    transform: scale(0.6);
+    opacity: 0;
+    transition:
+      transform 1s var(--ease) 0.3s,
+      opacity 1s var(--ease) 0.3s;
+  }
+  .radial__node {
+    fill: var(--green-900);
+    transform-box: fill-box;
+    transform-origin: center;
+    transform: scale(0);
+    transition: transform 0.6s var(--ease), fill 0.4s var(--ease);
+    transition-delay: calc(0.5s + var(--i) * 0.15s), 0s;
+  }
+  .radial__center {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    font-family: var(--serif);
+    font-size: clamp(1.05rem, 1.6vw, 1.35rem);
+    line-height: 1.1;
+    text-align: center;
+    color: var(--green-900);
+    opacity: 0;
+    transition: opacity 1s var(--ease) 0.8s;
+  }
+  .radial__label {
+    position: absolute;
+    transform: translate(var(--tx), var(--ty));
+    width: max-content;
+    max-width: 9.5rem;
+    font-size: 0.78rem;
+    font-weight: 500;
+    line-height: 1.25;
+    color: var(--ink-soft);
+    opacity: 0;
+    transition:
+      opacity 0.8s var(--ease),
+      color 0.4s var(--ease);
+    transition-delay: calc(1s + var(--i) * 0.15s), 0s;
+  }
+  .radial__label em {
+    display: block;
+    font-style: normal;
+    font-size: 0.68rem;
+    color: var(--gold-500);
+  }
+
+  .radial.is-visible .radial__outer,
+  .radial.is-visible .radial__spokes line {
+    stroke-dashoffset: 0;
+  }
+  .radial.is-visible .radial__core {
+    transform: none;
+    opacity: 1;
+  }
+  .radial.is-visible .radial__node {
+    transform: scale(1);
+  }
+  .radial.is-visible .radial__center,
+  .radial.is-visible .radial__label {
+    opacity: 1;
+  }
+
+  /* Resaltado al pasar por la lista */
+  .radial[data-active] .radial__spokes line,
+  .radial[data-active] .radial__label {
+    transition-delay: 0s;
+  }
+  .radial[data-active] .radial__label {
+    color: var(--ink-mute);
+  }
+  .radial[data-active='0'] [data-node='0'],
+  .radial[data-active='1'] [data-node='1'],
+  .radial[data-active='2'] [data-node='2'],
+  .radial[data-active='3'] [data-node='3'],
+  .radial[data-active='4'] [data-node='4'] {
+    stroke: var(--gold-500);
+    stroke-width: 2;
+    fill: var(--gold-500);
+    color: var(--green-900);
+  }
+
+  @media (max-width: 960px) {
+    .caps__grid {
+      grid-template-columns: 1fr;
+    }
+    .radial {
+      max-width: 400px;
+      padding-inline: 3rem;
+      order: -1;
+    }
+    .radial__label {
+      font-size: 0;
+    }
+    .radial__label em {
+      font-size: 0.75rem;
+    }
+  }
+</style>

@@ -1,0 +1,277 @@
+---
+import BgLines from './BgLines.astro';
+
+interface Props {
+  num?: string;
+  symptoms?: boolean;
+}
+const { num, symptoms: showSymptoms = false } = Astro.props;
+
+// Trazos dispersos que, al entrar en pantalla, se ordenan en una sola visión.
+let seed = 7;
+const rand = () => {
+  seed = (seed * 16807) % 2147483647;
+  return (seed - 1) / 2147483646;
+};
+const lengths = [172, 130, 196, 114, 160, 144, 184, 122, 152];
+const strokes = lengths.map((len, i) => ({
+  len,
+  sx: 10 + rand() * 210,
+  sy: 30 + rand() * 300,
+  r: -50 + rand() * 100,
+  scale: 0.25 + rand() * 0.2,
+  y: 88 + i * 30,
+  i,
+}));
+const labels = [
+  { t: 'Finanzas', x: 0, y: 40 },
+  { t: 'Ventas', x: 170, y: 64 },
+  { t: 'Operaciones', x: 0, y: 190 },
+  { t: 'Mercado', x: 176, y: 330 },
+];
+
+const symptoms = [
+  ['Mucha información, poco conocimiento', 'Datos dispersos en sistemas que no se hablan entre sí', 'Se dedica más tiempo a construir el dato que a analizarlo'],
+  ['Inversión tecnológica sin retorno', 'Se compra la herramienta antes de definir la pregunta de negocio', 'Licencias infrautilizadas y escepticismo interno'],
+  ['Decisiones basadas en intuición', 'Ausencia de indicadores fiables y compartidos', 'Alta variabilidad en la calidad de las decisiones'],
+  ['Visión fragmentada', 'Negocio, finanzas y tecnología operan en compartimentos', 'Iniciativas que no se traducen en resultado económico'],
+  ['Gestión reactiva', 'Sin capacidad predictiva ni de simulación', 'Se corrige tarde y a mayor coste'],
+];
+---
+<section class="section problem has-bg" id="enfoque">
+  <BgLines side="left" />
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Negocio primero</p>
+
+    <div class="problem__grid">
+      <figure class="order" data-animate aria-label="Información dispersa que se ordena en una única visión">
+        <svg viewBox="0 0 560 360" aria-hidden="true">
+          {labels.map((l) => <text class="order__label" x={l.x} y={l.y}>{l.t.toUpperCase()}</text>)}
+          <g class="order__arrow">
+            <line x1="266" y1="200" x2="318" y2="200" />
+            <path d="M311 195 L318 200 L311 205" />
+          </g>
+          <text class="order__title" x="350" y="48">UNA VISIÓN</text>
+          <line class="order__rule" x1="350" y1="62" x2="560" y2="62" />
+          {strokes.map((s) => (
+            <line class="order__guide" x1="350" x2="560" y1={s.y + 13} y2={s.y + 13} />
+          ))}
+          {strokes.map((s) => (
+            <g
+              class="order__stroke"
+              style={`--sx:${s.sx.toFixed(0)}px; --sy:${s.sy.toFixed(0)}px; --r:${s.r.toFixed(0)}deg; --s:${s.scale.toFixed(2)}; --y:${s.y}px; --i:${s.i}`}
+            >
+              <line x1="0" y1="0" x2={s.len} y2="0" />
+            </g>
+          ))}
+        </svg>
+      </figure>
+
+      <div class="problem__copy">
+        <h2 class="display" data-reveal>Más herramientas no significan mejores decisiones.</h2>
+        <p class="lead" data-reveal style="--d:1">
+          La tecnología solo aporta valor cuando responde a una pregunta de negocio. Pese a la inversión
+          creciente, la mayoría de organizaciones sigue atrapada en los mismos cinco problemas.
+        </p>
+      </div>
+    </div>
+
+    {showSymptoms && (<>
+    <div class="symptoms" role="table" aria-label="Cinco problemas estructurales">
+      <div class="symptoms__head" role="row">
+        <span role="columnheader">Síntoma</span>
+        <span role="columnheader">Causa de fondo</span>
+        <span role="columnheader">Consecuencia</span>
+      </div>
+      {symptoms.map(([s, c, q], i) => (
+        <div class="symptoms__row" role="row" data-reveal style={`--d:${i}`}>
+          <span class="symptoms__name" role="cell"><em>0{i + 1}</em>{s}</span>
+          <span role="cell"><b class="symptoms__tag">Causa</b>{c}</span>
+          <span role="cell"><b class="symptoms__tag">Consecuencia</b>{q}</span>
+        </div>
+      ))}
+    </div>
+    <p class="symptoms__close" data-reveal>
+      Ninguno se resuelve con una herramienta. Todos se resuelven con un método:{" "}
+      <strong>traducir la pregunta de negocio en información, y la información en una decisión ejecutable.</strong>
+    </p>
+    </>)}
+  </div>
+</section>
+
+<style>
+  .problem {
+    background: var(--cream-100);
+  }
+  .problem__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(2.5rem, 6vw, 6rem);
+    align-items: center;
+    margin-top: clamp(2.5rem, 5vw, 4rem);
+  }
+  .order {
+    margin: 0;
+  }
+  .order svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .order__label,
+  .order__title {
+    font-family: var(--sans);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    fill: var(--ink-soft);
+    transition: opacity 1.2s var(--ease) 0.6s;
+  }
+  .order__title {
+    fill: var(--green-900);
+    font-weight: 600;
+    opacity: 0;
+    transition-delay: 1.3s;
+  }
+  .order__rule {
+    stroke: var(--green-900);
+    stroke-width: 1.2;
+    stroke-dasharray: 210;
+    stroke-dashoffset: 210;
+    transition: stroke-dashoffset 1s var(--ease) 1.2s;
+  }
+  .order__guide {
+    stroke: var(--line);
+    stroke-width: 1;
+    opacity: 0;
+    transition: opacity 1s var(--ease) 1.4s;
+  }
+  .order__arrow {
+    stroke: var(--ink-soft);
+    stroke-width: 1;
+    fill: none;
+    opacity: 0;
+    transform: translateX(-12px);
+    transition:
+      opacity 0.8s var(--ease) 0.5s,
+      transform 0.8s var(--ease) 0.5s;
+  }
+  .order__stroke {
+    transform: translate(var(--sx), var(--sy)) rotate(var(--r)) scaleX(var(--s));
+    transition: transform 1.5s var(--ease);
+    transition-delay: calc(0.35s + var(--i) * 70ms);
+  }
+  .order__stroke line {
+    stroke: #8c8a80;
+    stroke-width: 3;
+    transition: stroke 1.5s var(--ease), stroke-width 1.5s var(--ease);
+    transition-delay: inherit;
+  }
+  .order.is-visible .order__stroke {
+    transform: translate(350px, var(--y)) rotate(0deg) scaleX(1);
+  }
+  .order.is-visible .order__stroke line {
+    stroke: var(--ink);
+    stroke-width: 2.5;
+  }
+  .order.is-visible .order__label {
+    opacity: 0.45;
+  }
+  .order.is-visible .order__title,
+  .order.is-visible .order__guide,
+  .order.is-visible .order__arrow {
+    opacity: 1;
+    transform: none;
+  }
+  .order.is-visible .order__rule {
+    stroke-dashoffset: 0;
+  }
+
+  .problem__copy .lead {
+    margin-top: 1.75rem;
+  }
+
+  .symptoms {
+    margin-top: clamp(4rem, 8vw, 6.5rem);
+    border-top: 1px solid var(--ink);
+  }
+  .symptoms__head,
+  .symptoms__row {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr 1fr;
+    gap: 2rem;
+    padding-block: 1.35rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .symptoms__head {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-mute);
+    padding-block: 1rem;
+  }
+  .symptoms__row {
+    font-size: 0.97rem;
+    color: var(--ink-soft);
+    transition: background-color 0.4s var(--ease);
+  }
+  .symptoms__row:hover {
+    background: color-mix(in srgb, var(--cream-200) 55%, transparent);
+  }
+  .symptoms__name {
+    font-family: var(--serif);
+    font-size: 1.35rem;
+    line-height: 1.2;
+    color: var(--ink);
+    display: flex;
+    gap: 1rem;
+  }
+  .symptoms__name em {
+    font-style: normal;
+    font-family: var(--sans);
+    font-size: 0.72rem;
+    color: var(--gold-500);
+    padding-top: 0.45rem;
+  }
+  .symptoms__tag {
+    display: none;
+  }
+  .symptoms__close {
+    margin-top: 2.5rem;
+    max-width: 48rem;
+    font-family: var(--serif);
+    font-size: clamp(1.3rem, 2.2vw, 1.7rem);
+    line-height: 1.35;
+    color: var(--ink-soft);
+  }
+  .symptoms__close strong {
+    font-weight: 400;
+    color: var(--ink);
+  }
+
+  @media (max-width: 900px) {
+    .problem__grid {
+      grid-template-columns: 1fr;
+    }
+    .problem__copy {
+      order: -1;
+    }
+    .symptoms__head {
+      display: none;
+    }
+    .symptoms__row {
+      grid-template-columns: 1fr;
+      gap: 0.6rem;
+    }
+    .symptoms__tag {
+      display: block;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+    }
+  }
+</style>

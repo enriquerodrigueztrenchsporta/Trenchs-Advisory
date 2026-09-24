@@ -1,0 +1,162 @@
+---
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+// Documento fundacional, apartado 6: las cinco disciplinas que se integran.
+const disciplines = [
+  { t: 'Estrategia', items: ['Objetivos traducidos a indicadores medibles', 'Priorización según impacto y esfuerzo', 'Hojas de ruta con hitos y responsables'] },
+  { t: 'Finanzas', items: ['Rentabilidad por cliente, producto o línea', 'Previsiones de resultados y tesorería', 'Soporte a decisiones de inversión'] },
+  { t: 'Datos', items: ['Información dispersa convertida en conocimiento', 'Indicadores comunes y sin ambigüedad', 'Modelos predictivos y detección de anomalías'] },
+  { t: 'Tecnología', items: ['Herramientas elegidas por coste total', 'Arquitecturas de información e integración', 'Automatización de flujos de trabajo'] },
+  { t: 'Inteligencia artificial', items: ['Casos de uso con retorno estimado', 'Asistentes sobre conocimiento propio', 'IA como soporte, no sustituto, de la decisión'] },
+];
+---
+<section class="section disc">
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Qué hacemos</p>
+    <div class="disc__intro">
+      <h2 class="display" data-reveal>Cinco disciplinas, una sola lógica económica.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        El valor no está en cada disciplina por separado —el mercado ya las ofrece— sino en articularlas bajo
+        un único responsable para que cada iniciativa se traduzca en resultado.
+      </p>
+    </div>
+
+    <div class="disc__board" data-animate>
+      <ol class="disc__cols">
+        {disciplines.map((d, i) => (
+          <li class="disc__col" style={`--i:${i}`}>
+            <span class="disc__num">0{i + 1}</span>
+            <h3>{d.t}</h3>
+            <ul>
+              {d.items.map((it) => <li>{it}</li>)}
+            </ul>
+          </li>
+        ))}
+      </ol>
+      <svg class="disc__merge" viewBox="0 0 1000 140" preserveAspectRatio="none" aria-hidden="true">
+        {[100, 300, 500, 700, 900].map((x, i) => (
+          <path d={`M${x} 0 C${x} 70 500 60 500 130`} pathLength="1" style={`--i:${i}`} />
+        ))}
+      </svg>
+      <p class="disc__result"><span></span>Capacidad de decisión</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .disc__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .disc__board {
+    margin-top: clamp(3.5rem, 7vw, 5rem);
+  }
+  .disc__cols {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .disc__col {
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--ink);
+    opacity: 0;
+    transform: translateY(14px);
+    transition:
+      opacity 0.8s var(--ease),
+      transform 0.8s var(--ease);
+    transition-delay: calc(var(--i) * 0.12s);
+  }
+  .disc__num {
+    font-size: 0.72rem;
+    color: var(--gold-500);
+  }
+  .disc__col h3 {
+    margin-top: 0.6rem;
+    font-size: clamp(1.3rem, 1.8vw, 1.6rem);
+    font-weight: 400;
+  }
+  .disc__col ul {
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+    font-size: 0.88rem;
+    color: var(--ink-soft);
+  }
+  .disc__col ul li {
+    padding-block: 0.5rem;
+    border-bottom: 1px solid var(--line);
+  }
+  .disc__merge {
+    display: block;
+    width: 100%;
+    height: 7rem;
+    margin-top: 1.5rem;
+  }
+  .disc__merge path {
+    fill: none;
+    stroke: var(--green-900);
+    stroke-width: 1;
+    vector-effect: non-scaling-stroke;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke-dashoffset 1.6s var(--ease);
+    transition-delay: calc(0.8s + var(--i) * 0.1s);
+  }
+  .disc__result {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.9rem;
+    font-family: var(--serif);
+    font-size: clamp(1.5rem, 2.4vw, 2rem);
+    color: var(--green-900);
+    opacity: 0;
+    transition: opacity 1s var(--ease) 2s;
+  }
+  .disc__result span {
+    width: 0.85rem;
+    height: 0.85rem;
+    background: var(--gold-500);
+    box-shadow: 0 0 0 6px rgb(176 138 62 / 0.18);
+  }
+  .disc__board.is-visible .disc__col {
+    opacity: 1;
+    transform: none;
+  }
+  .disc__board.is-visible .disc__merge path {
+    stroke-dashoffset: 0;
+  }
+  .disc__board.is-visible .disc__result {
+    opacity: 1;
+  }
+
+  @media (max-width: 960px) {
+    .disc__intro {
+      grid-template-columns: 1fr;
+    }
+    .disc__cols {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 2rem;
+    }
+    .disc__merge {
+      display: none;
+    }
+    .disc__result {
+      margin-top: 2.5rem;
+    }
+  }
+  @media (max-width: 520px) {
+    .disc__cols {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

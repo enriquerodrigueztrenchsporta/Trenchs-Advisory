@@ -1,0 +1,320 @@
+---
+import { QUESTIONS as questions } from '../data/services';
+
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+---
+<section class="section questions has-bg bg-grid" style="--grid-x:20%; --grid-y:70%" data-questions>
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} Cómo pensamos</p>
+    <div class="questions__intro">
+      <h2 class="display" data-reveal>Cinco preguntas, de la información a la decisión.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        Todo encargo, sea cual sea su envoltorio técnico, se ordena alrededor de estas preguntas.
+        Se puede entrar por la primera y avanzar de forma natural hasta la última.
+      </p>
+    </div>
+
+    <div class="timeline" role="tablist" aria-label="Las cinco preguntas" style="--n:5">
+      <div class="timeline__track" aria-hidden="true"><span class="timeline__fill"></span></div>
+      {questions.map((item, i) => (
+        <button
+          class="timeline__step"
+          role="tab"
+          id={`q-tab-${i}`}
+          aria-controls="q-panel"
+          aria-selected={i === 0 ? 'true' : 'false'}
+          tabindex={i === 0 ? 0 : -1}
+          data-index={i}
+          data-discipline={item.discipline}
+          data-deliverable={item.deliverable}
+        >
+          <span class="timeline__dot" aria-hidden="true"></span>
+          <span class="timeline__num">0{i + 1}</span>
+          <span class="timeline__q">{item.q}</span>
+        </button>
+      ))}
+    </div>
+
+    <div class="qpanel" id="q-panel" role="tabpanel" aria-labelledby="q-tab-0" aria-live="polite">
+      <div class="qpanel__col">
+        <span class="qpanel__label">Disciplina</span>
+        <p class="qpanel__value" data-q-discipline>{questions[0].discipline}</p>
+      </div>
+      <div class="qpanel__col">
+        <span class="qpanel__label">Entregable típico</span>
+        <p class="qpanel__value" data-q-deliverable>{questions[0].deliverable}</p>
+      </div>
+      <div class="qpanel__progress" aria-hidden="true"><span></span></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  const root = document.querySelector<HTMLElement>('[data-questions]');
+  if (root) {
+    const steps = [...root.querySelectorAll<HTMLButtonElement>('.timeline__step')];
+    const panel = root.querySelector<HTMLElement>('.qpanel')!;
+    const discipline = root.querySelector<HTMLElement>('[data-q-discipline]')!;
+    const deliverable = root.querySelector<HTMLElement>('[data-q-deliverable]')!;
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const INTERVAL = 4200;
+    let current = 0;
+    let timer: number | undefined;
+    let auto = !reduced;
+
+    const select = (i: number, focus = false) => {
+      current = i;
+      root.style.setProperty('--active', String(i));
+      steps.forEach((s, k) => {
+        const on = k === i;
+        s.setAttribute('aria-selected', String(on));
+        s.tabIndex = on ? 0 : -1;
+        s.classList.toggle('is-done', k < i);
+      });
+      panel.setAttribute('aria-labelledby', steps[i].id);
+      panel.classList.remove('is-swapping');
+      void panel.offsetWidth;
+      panel.classList.add('is-swapping');
+      discipline.textContent = steps[i].dataset.discipline ?? '';
+      deliverable.textContent = steps[i].dataset.deliverable ?? '';
+      if (focus) steps[i].focus();
+    };
+
+    const schedule = () => {
+      window.clearTimeout(timer);
+      panel.classList.toggle('is-auto', auto);
+      if (!auto) return;
+      timer = window.setTimeout(() => {
+        select((current + 1) % steps.length);
+        schedule();
+      }, INTERVAL);
+    };
+
+    steps.forEach((s, i) =>
+      s.addEventListener('click', () => {
+        auto = false;
+        select(i);
+        schedule();
+      }),
+    );
+    root.querySelector('.timeline')!.addEventListener('keydown', (e) => {
+      const ev = e as KeyboardEvent;
+      if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
+      ev.preventDefault();
+      auto = false;
+      const dir = ev.key === 'ArrowRight' ? 1 : -1;
+      select((current + dir + steps.length) % steps.length, true);
+      schedule();
+    });
+
+    // Solo avanza sola mientras está en pantalla.
+    select(0);
+    new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) schedule();
+        else window.clearTimeout(timer);
+      },
+      { threshold: 0.35 },
+    ).observe(root);
+  }
+</script>
+
+<style>
+  .questions__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .timeline {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+    margin-top: clamp(3.5rem, 7vw, 5.5rem);
+  }
+  .timeline__track {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.5rem;
+    right: calc(100% / var(--n) - 0.5rem);
+    height: 1px;
+    background: var(--line);
+  }
+  .timeline__fill {
+    position: absolute;
+    inset: 0;
+    background: var(--ink);
+    transform-origin: left;
+    transition: transform 0.9s var(--ease);
+  }
+  .timeline__fill {
+    transform: scaleX(calc(var(--active, 0) / 4));
+  }
+  .timeline__step {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.9rem;
+    padding: 0 1.5rem 0 0;
+    background: none;
+    border: 0;
+    text-align: left;
+    cursor: pointer;
+    color: var(--ink-mute);
+    font: inherit;
+  }
+  .timeline__dot {
+    width: 1rem;
+    height: 1rem;
+    border-radius: 50%;
+    border: 1px solid var(--ink-mute);
+    background: var(--cream-50);
+    position: relative;
+    transition:
+      background-color 0.5s var(--ease),
+      border-color 0.5s var(--ease),
+      transform 0.5s var(--ease);
+  }
+  .timeline__dot::after {
+    content: '';
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1px solid var(--gold-500);
+    opacity: 0;
+    transform: scale(0.6);
+    transition:
+      opacity 0.5s var(--ease),
+      transform 0.5s var(--ease);
+  }
+  .timeline__step.is-done .timeline__dot,
+  .timeline__step[aria-selected='true'] .timeline__dot {
+    background: var(--gold-500);
+    border-color: var(--gold-500);
+  }
+  .timeline__step[aria-selected='true'] .timeline__dot {
+    transform: scale(1.15);
+  }
+  .timeline__step[aria-selected='true'] .timeline__dot::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+  .timeline__num {
+    font-size: 0.75rem;
+    margin-top: 0.75rem;
+  }
+  .timeline__q {
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2.1vw, 1.85rem);
+    line-height: 1.15;
+    color: var(--ink-mute);
+    transition: color 0.5s var(--ease);
+  }
+  .timeline__step:hover .timeline__q,
+  .timeline__step.is-done .timeline__q {
+    color: var(--ink-soft);
+  }
+  .timeline__step[aria-selected='true'] .timeline__q {
+    color: var(--ink);
+  }
+
+  .qpanel {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 2rem;
+    margin-top: 3rem;
+    padding: 2rem 2.25rem;
+    background: var(--green-900);
+    color: var(--cream-50);
+    overflow: hidden;
+  }
+  .qpanel__label {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--gold-300);
+  }
+  .qpanel__value {
+    margin-top: 0.6rem;
+    font-family: var(--serif);
+    font-size: clamp(1.25rem, 2vw, 1.6rem);
+    line-height: 1.25;
+  }
+  .qpanel.is-swapping .qpanel__value {
+    animation: swap 0.7s var(--ease);
+  }
+  @keyframes swap {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+  }
+  .qpanel__progress {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: 2px;
+    background: rgb(255 255 255 / 0.08);
+  }
+  .qpanel__progress span {
+    display: block;
+    height: 100%;
+    background: var(--gold-500);
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  .qpanel.is-auto.is-swapping .qpanel__progress span {
+    animation: progress 4.2s linear forwards;
+  }
+  @keyframes progress {
+    to {
+      transform: scaleX(1);
+    }
+  }
+
+  @media (max-width: 860px) {
+    .questions__intro {
+      grid-template-columns: 1fr;
+    }
+    .timeline {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .timeline__track {
+      top: 0.5rem;
+      bottom: 1.5rem;
+      left: 0.5rem;
+      right: auto;
+      width: 1px;
+      height: auto;
+    }
+    .timeline__fill {
+      transform-origin: top;
+    }
+    .timeline__fill {
+      transform: scaleY(calc(var(--active, 0) / 4));
+    }
+    .timeline__step {
+      display: grid;
+      grid-template-columns: 1rem auto 1fr;
+      align-items: baseline;
+      gap: 1rem;
+      padding: 0;
+    }
+    .timeline__num {
+      margin-top: 0;
+    }
+    .qpanel {
+      grid-template-columns: 1fr;
+      padding: 1.75rem 1.5rem;
+    }
+  }
+</style>

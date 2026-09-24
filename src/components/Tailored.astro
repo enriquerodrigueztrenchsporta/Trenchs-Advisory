@@ -1,0 +1,167 @@
+---
+import BgLines from './BgLines.astro';
+
+interface Props {
+  num?: string;
+}
+const { num } = Astro.props;
+
+const points = [
+  {
+    t: 'Al tamaño y al presupuesto',
+    d: 'Dimensionamos cada encargo según la organización. Empezamos por un encargo acotado que resuelva un problema visible y ampliamos cuando el valor está demostrado.',
+  },
+  {
+    t: 'A la forma de colaborar',
+    d: 'Elegimos juntos la modalidad que mejor encaja con su situación.',
+    modes: ['Proyecto cerrado', 'Servicio recurrente', 'Formación'],
+  },
+  {
+    t: 'Al sector y al contexto',
+    d: 'No es lo mismo una empresa familiar que una cooperativa o un ayuntamiento. Partimos de sus decisiones críticas, no de una plantilla.',
+  },
+  {
+    t: 'A las herramientas que ya tiene',
+    d: 'Aprovechamos lo que ya funciona. Solo recomendamos una herramienta nueva cuando responde a una pregunta de negocio.',
+  },
+];
+---
+<section class="section tailored has-bg" id="a-la-medida">
+  <BgLines side="right" />
+  <div class="container">
+    <p class="eyebrow" data-reveal>{num && <span class="eyebrow__num">{num}</span>} A la medida</p>
+    <div class="tailored__intro">
+      <h2 class="display" data-reveal>Cada organización es distinta. Nuestro trabajo, también.</h2>
+      <p class="lead" data-reveal style="--d:1">
+        No aplicamos soluciones de catálogo. Adaptamos el alcance, el ritmo y la forma de trabajar a cada cliente.
+      </p>
+    </div>
+
+    <ol class="points">
+      {points.map((p, i) => (
+        <li class="point" data-reveal style={`--d:${i}`}>
+          <svg class="point__icon" viewBox="0 0 48 48" aria-hidden="true">
+            <rect x="1" y="1" width="46" height="46" />
+            <path d={`M${10 + i * 3} 1 C${12 + i * 3} 18 ${20 + i * 2} 28 ${22 + i * 2} 47`} />
+          </svg>
+          <span class="point__num">0{i + 1}</span>
+          <h3>{p.t}</h3>
+          <p>{p.d}</p>
+          {p.modes && (
+            <ul class="modes">
+              {p.modes.map((m) => <li>{m}</li>)}
+            </ul>
+          )}
+        </li>
+      ))}
+    </ol>
+  </div>
+</section>
+
+<style>
+  .tailored {
+    background: var(--cream-100);
+  }
+  .tailored__intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 2rem clamp(2rem, 6vw, 6rem);
+    align-items: end;
+    margin-top: clamp(2rem, 4vw, 3rem);
+  }
+  .points {
+    list-style: none;
+    margin: clamp(3.5rem, 7vw, 5rem) 0 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  .point {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 2rem 1.75rem 2.25rem;
+    background: var(--cream-50);
+    border: 1px solid var(--line);
+    transition:
+      transform 0.5s var(--ease),
+      box-shadow 0.5s var(--ease),
+      border-color 0.5s var(--ease);
+  }
+  .point:hover {
+    transform: translateY(-6px);
+    border-color: var(--gold-300);
+    box-shadow: 0 24px 40px -28px rgb(31 58 51 / 0.35);
+  }
+  .point__icon {
+    width: 2.75rem;
+    height: 2.75rem;
+    fill: none;
+    stroke: var(--green-900);
+    stroke-width: 1.2;
+  }
+  .point__icon path {
+    stroke: var(--gold-500);
+    stroke-dasharray: 60;
+    stroke-dashoffset: 60;
+    transition: stroke-dashoffset 1.2s var(--ease) 0.4s;
+  }
+  .point.is-visible .point__icon path {
+    stroke-dashoffset: 0;
+  }
+  .point__num {
+    margin-top: 1.75rem;
+    font-size: 0.72rem;
+    color: var(--gold-500);
+  }
+  .point h3 {
+    margin-top: 0.6rem;
+    font-size: clamp(1.35rem, 1.9vw, 1.6rem);
+    font-weight: 400;
+    line-height: 1.15;
+  }
+  .point p {
+    margin-top: 0.8rem;
+    font-size: 0.93rem;
+    color: var(--ink-soft);
+  }
+  .modes {
+    list-style: none;
+    margin: 1.25rem 0 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .modes li {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--green-900);
+  }
+  .modes li::before {
+    content: '';
+    width: 0.45rem;
+    height: 0.45rem;
+    background: var(--gold-500);
+  }
+
+  @media (max-width: 1100px) {
+    .points {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 860px) {
+    .tailored__intro {
+      grid-template-columns: 1fr;
+    }
+  }
+  @media (max-width: 560px) {
+    .points {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>
