@@ -166,10 +166,6 @@ a {
   font-size: 0.88rem;
 }
 
-.note {
-  font-size: 0.85rem;
-  color: var(--ink-mute);
-}
 
 /* Aparición al hacer scroll */
 .js [data-reveal] {

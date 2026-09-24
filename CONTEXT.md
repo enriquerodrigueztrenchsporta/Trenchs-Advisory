@@ -9,7 +9,7 @@ Nombre comercial de la firma. En la web se habla siempre en primera persona del 
 _Avoid_: Trenchs a secas, "boutique"
 
 **Solicitar diagnóstico**:
-Llamada a la acción de la web. Pide la **sesión inicial**, no el servicio **Diagnóstico digital**. Siempre va acompañada de la aclaración "sesión inicial sin coste".
+Llamada a la acción de la web. Pide la **sesión inicial**, no el servicio **Diagnóstico digital**. No se acompaña de la coletilla "sesión inicial sin coste" (retirada por decisión del propietario).
 
 **Sesión inicial**:
 Primera conversación con un posible cliente, sin coste. Sirve para entender su problema y cualificarlo.
@@ -38,4 +38,4 @@ Marco con el que se ordena todo encargo, de "¿Qué está ocurriendo?" a "¿Cóm
 
 ## Flagged ambiguities
 
-- "Diagnóstico" se usaba para tres cosas distintas (sesión gratuita, fase del método, servicio de pago). Resuelto: se distinguen como **Sesión inicial**, **Fase de Diagnóstico** y **Diagnóstico digital**. El botón "Solicitar diagnóstico" se mantiene y siempre aclara "sesión inicial sin coste".
+- "Diagnóstico" se usaba para tres cosas distintas (sesión gratuita, fase del método, servicio de pago). Resuelto: se distinguen como **Sesión inicial**, **Fase de Diagnóstico** y **Diagnóstico digital**. El botón "Solicitar diagnóstico" se mantiene, sin la coletilla "sesión inicial sin coste".
