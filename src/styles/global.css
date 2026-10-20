@@ -26,6 +26,7 @@
   --ease: cubic-bezier(0.22, 1, 0.36, 1);
 
   --gutter: clamp(1rem, 4vw, 4rem);
+  --section-y: clamp(4.5rem, 8vw, 7.5rem);
   --maxw: 80rem;
 }
 
@@ -119,7 +120,11 @@ a {
 }
 
 .section {
-  padding-block: clamp(5rem, 11vw, 9.5rem);
+  padding-block: var(--section-y);
+}
+/* Sección con el mismo fondo que la anterior: sin cambio de color, el hueco doble sobra. */
+.section--follow {
+  padding-top: 3rem;
 }
 
 .eyebrow {
