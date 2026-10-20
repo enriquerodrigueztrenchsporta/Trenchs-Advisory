@@ -11,7 +11,7 @@ export const OWNER = {
   /** NIF (autónomo) o NIF de la sociedad. */
   taxId: '', // Pendiente de obtener: al rellenarlo se muestra en el aviso legal y la privacidad.
   /** Domicilio completo: calle, número, código postal, municipio y provincia. */
-  address: 'C/ Fermín Caballero, 28, 28034 Madrid',
+  address: '', // Pendiente: dirección del coworking o servicio de domiciliación.
   /** Solo sociedades: Registro Mercantil de ..., tomo, folio, hoja e inscripción. */
   registry: '',
   /** Opcional: teléfono de contacto. */
