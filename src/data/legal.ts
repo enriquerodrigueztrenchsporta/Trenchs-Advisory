@@ -5,13 +5,13 @@ import { EMAIL } from '../consts';
 
 export const OWNER = {
   /** 'autonomo' (persona física) o 'sociedad' (S.L., S.A., etc.). */
-  type: '' as '' | 'autonomo' | 'sociedad',
+  type: 'autonomo' as '' | 'autonomo' | 'sociedad',
   /** Nombre y apellidos del autónomo o razón social completa de la sociedad. */
-  name: '',
+  name: 'Enrique Rodríguez-Trenchs Porta',
   /** NIF (autónomo) o NIF de la sociedad. */
-  taxId: '',
+  taxId: '', // Pendiente de obtener: al rellenarlo se muestra en el aviso legal y la privacidad.
   /** Domicilio completo: calle, número, código postal, municipio y provincia. */
-  address: '',
+  address: 'C/ Fermín Caballero, 28, 28034 Madrid',
   /** Solo sociedades: Registro Mercantil de ..., tomo, folio, hoja e inscripción. */
   registry: '',
   /** Opcional: teléfono de contacto. */
