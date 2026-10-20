@@ -46,7 +46,7 @@ const nodes = SERVICES.map((s, i) => {
 
       <figure class="radial" data-animate aria-hidden="true">
         <div class="radial__box">
-        <svg viewBox="0 0 440 440">
+        <svg viewBox="0 0 440 440" aria-hidden="true">
           <circle class="radial__orbit" cx={C} cy={C} r="112" />
           <circle class="radial__outer" cx={C} cy={C} r={R} pathLength="1" />
           <g class="radial__spokes">
@@ -144,7 +144,7 @@ const nodes = SERVICES.map((s, i) => {
   }
   .cap__num {
     font-size: 0.75rem;
-    color: var(--gold-500);
+    color: var(--gold-700);
   }
   .cap__text {
     display: flex;
@@ -299,7 +299,7 @@ const nodes = SERVICES.map((s, i) => {
     display: block;
     font-style: normal;
     font-size: 0.68rem;
-    color: var(--gold-500);
+    color: var(--gold-700);
   }
 
   .radial.is-visible .radial__outer,

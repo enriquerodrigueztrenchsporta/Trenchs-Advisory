@@ -1,0 +1,103 @@
+---
+// Páginas de información legal: cabecera sencilla y texto continuo, sin bloque de cierre comercial.
+import Base from './Base.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import PageHero from '../components/PageHero.astro';
+import { LEGAL_UPDATED } from '../data/legal';
+
+interface Props {
+  title: string;
+  description: string;
+}
+const { title, description } = Astro.props;
+const updated = new Date(`${LEGAL_UPDATED}T12:00:00`).toLocaleDateString('es-ES', {
+  day: 'numeric',
+  month: 'long',
+  year: 'numeric',
+});
+---
+<Base title={`${title} · Trenchs Advisory`} description={description}>
+  <Header />
+  <main id="contenido" tabindex="-1">
+    <PageHero kicker="Información legal" title={title} lead={`Última actualización: ${updated}.`} />
+    <div class="container">
+      <article class="legal">
+        <slot />
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Base>
+
+<style>
+  .legal {
+    max-width: 46rem;
+    padding-block: 1rem clamp(4rem, 9vw, 7rem);
+    color: var(--ink-soft);
+  }
+  .legal :global(h2) {
+    margin-top: 3rem;
+    font-size: clamp(1.6rem, 2.6vw, 2rem);
+    line-height: 1.15;
+    color: var(--ink);
+  }
+  .legal :global(h3) {
+    margin-top: 1.75rem;
+    font-family: var(--sans);
+    font-size: 1.05rem;
+    font-weight: 600;
+    line-height: 1.3;
+    color: var(--ink);
+  }
+  .legal :global(p),
+  .legal :global(ul),
+  .legal :global(dl) {
+    margin-top: 1rem;
+  }
+  .legal :global(ul) {
+    padding-left: 1.25rem;
+  }
+  .legal :global(li + li) {
+    margin-top: 0.4rem;
+  }
+  .legal :global(a) {
+    color: var(--green-900);
+    text-underline-offset: 3px;
+    overflow-wrap: anywhere;
+  }
+  .legal :global(strong) {
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .legal :global(dl) {
+    display: grid;
+    grid-template-columns: minmax(8rem, max-content) 1fr;
+    gap: 0.6rem 1.5rem;
+    padding: 1.5rem;
+    background: var(--cream-100);
+    border: 1px solid var(--line);
+  }
+  .legal :global(dt) {
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .legal :global(dd) {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .legal :global(mark) {
+    padding: 0 0.25rem;
+    background: #ffe9a8;
+    color: var(--ink);
+  }
+  @media (max-width: 520px) {
+    .legal :global(dl) {
+      grid-template-columns: 1fr;
+      gap: 0.2rem;
+    }
+    .legal :global(dd + dt) {
+      margin-top: 0.6rem;
+    }
+  }
+</style>

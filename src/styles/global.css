@@ -5,7 +5,9 @@
   --green-900: #1f3a33;
   --green-800: #274840;
   --green-600: #3e6b5e;
+  --green-400: #7a9e91;
   --green-300: #9db5ac;
+  --gold-700: #7a5c25;
   --gold-500: #b08a3e;
   --gold-300: #d4b778;
   --cream-50: #f5f3ee;
@@ -13,8 +15,11 @@
   --cream-200: #e2ddd1;
   --ink: #1a1c1b;
   --ink-soft: #4d524f;
-  --ink-mute: #7d807b;
+  --ink-mute: #666a66;
   --line: #d7d2c6;
+  /* Contraste WCAG AA: --gold-700 e --ink-mute para texto sobre crema (≥ 4,5:1);
+     --gold-500 solo para trazos y fondos decorativos. --focus se redefine en secciones oscuras. */
+  --focus: var(--green-900);
 
   --serif: 'Newsreader Variable', 'Iowan Old Style', Georgia, serif;
   --sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -75,8 +80,35 @@ a {
 }
 
 :focus-visible {
-  outline: 2px solid var(--gold-500);
+  outline: 2px solid var(--focus);
   outline-offset: 3px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: 0.75rem;
+  left: 0.75rem;
+  z-index: 100;
+  padding: 0.75rem 1.1rem;
+  background: var(--green-900);
+  color: var(--cream-50);
+  font-size: 0.95rem;
+  font-weight: 550;
+  text-decoration: none;
+  transform: translateY(-200%);
+}
+.skip-link:focus {
+  transform: none;
+  --focus: var(--gold-300);
 }
 
 .container {
@@ -179,6 +211,23 @@ a {
 .js [data-reveal].is-visible {
   opacity: 1;
   transform: none;
+}
+
+/* Animaciones en bucle pausadas por el usuario (botón del pie, WCAG 2.2.2).
+   Solo los bucles decorativos: las animaciones de entrada no se tocan. */
+.motion-paused .bg-grid::before,
+.motion-paused .bg-lines path,
+.motion-paused .radial__orbit,
+.motion-paused .radial__pulses line,
+.motion-paused .closing__lines path,
+.motion-paused .flow__pulses path,
+.motion-paused .flow__ring,
+.motion-paused .hero__scroll span,
+.motion-paused .qmap__dot::after {
+  animation-play-state: paused !important;
+}
+.motion-paused .phero__mark {
+  animation: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

@@ -8,7 +8,7 @@ const { tone = 'dark', side = 'right' } = Astro.props;
 const offsets = [0, 34, 68, 102, 136, 170, 204];
 ---
 <div class:list={['bg-lines', `bg-lines--${tone}`, `bg-lines--${side}`]} aria-hidden="true">
-  <svg viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice">
+  <svg viewBox="0 0 600 900" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
     {offsets.map((o, i) => (
       <path
         d={`M${160 + o} -20 C${160 + o} 160 ${200 + o} 300 ${250 + o} 480 C${290 + o} 620 ${300 + o} 760 ${296 + o} 920`}

@@ -67,6 +67,10 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
           </div>
         ))}
       </div>
+      <p class="what__note" data-reveal>
+        Los beneficios indicados describen el objetivo de cada servicio. El resultado concreto depende de cada
+        organización y se concreta en la propuesta de trabajo.
+      </p>
     </div>
   </section>
 
@@ -258,7 +262,7 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
     font-style: normal;
     font-family: var(--sans);
     font-size: 0.72rem;
-    color: var(--gold-500);
+    color: var(--gold-700);
     padding-top: 0.45rem;
   }
   .table__benefit {
@@ -267,6 +271,12 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
   }
   .table__tag {
     display: none;
+  }
+  .what__note {
+    margin-top: 1.5rem;
+    max-width: 44rem;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
   }
 
   .how__grid {
@@ -311,11 +321,14 @@ const others = SERVICES.filter((s) => s.slug !== service.slug);
   .chip span {
     font-family: var(--sans);
     font-size: 0.7rem;
-    color: var(--gold-500);
+    color: var(--gold-700);
   }
   .chip:hover {
     background: var(--green-900);
     color: var(--cream-50);
+  }
+  .chip:hover span {
+    color: var(--gold-300);
   }
   .chips.is-visible .chip {
     opacity: 1;

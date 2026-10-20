@@ -38,7 +38,7 @@ const { num } = Astro.props;
       ))}
     </div>
 
-    <div class="qpanel" id="q-panel" role="tabpanel" aria-labelledby="q-tab-0" aria-live="polite">
+    <div class="qpanel" id="q-panel" role="tabpanel" aria-labelledby="q-tab-0" aria-live="off">
       <div class="qpanel__col">
         <span class="qpanel__label">Disciplina</span>
         <p class="qpanel__value" data-q-discipline>{questions[0].discipline}</p>
@@ -49,6 +49,7 @@ const { num } = Astro.props;
       </div>
       <div class="qpanel__progress" aria-hidden="true"><span></span></div>
     </div>
+    <button class="qtoggle" type="button" data-q-toggle hidden>Pausar el avance automático</button>
   </div>
 </section>
 
@@ -59,11 +60,13 @@ const { num } = Astro.props;
     const panel = root.querySelector<HTMLElement>('.qpanel')!;
     const discipline = root.querySelector<HTMLElement>('[data-q-discipline]')!;
     const deliverable = root.querySelector<HTMLElement>('[data-q-deliverable]')!;
+    const toggle = root.querySelector<HTMLButtonElement>('[data-q-toggle]')!;
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const INTERVAL = 4200;
     let current = 0;
     let timer: number | undefined;
-    let auto = !reduced;
+    let auto = !reduced && !document.documentElement.classList.contains('motion-paused');
+    let inView = false;
 
     const select = (i: number, focus = false) => {
       current = i;
@@ -86,7 +89,10 @@ const { num } = Astro.props;
     const schedule = () => {
       window.clearTimeout(timer);
       panel.classList.toggle('is-auto', auto);
-      if (!auto) return;
+      // Solo se anuncian los cambios que pide el usuario, no los automáticos.
+      panel.setAttribute('aria-live', auto ? 'off' : 'polite');
+      toggle.textContent = auto ? 'Pausar el avance automático' : 'Reanudar el avance automático';
+      if (!auto || !inView) return;
       timer = window.setTimeout(() => {
         select((current + 1) % steps.length);
         schedule();
@@ -100,6 +106,17 @@ const { num } = Astro.props;
         schedule();
       }),
     );
+    toggle.hidden = false;
+    toggle.addEventListener('click', () => {
+      auto = !auto;
+      schedule();
+    });
+    document.addEventListener('motionchange', (e) => {
+      if ((e as CustomEvent<{ paused: boolean }>).detail.paused) {
+        auto = false;
+        schedule();
+      }
+    });
     root.querySelector('.timeline')!.addEventListener('keydown', (e) => {
       const ev = e as KeyboardEvent;
       if (ev.key !== 'ArrowRight' && ev.key !== 'ArrowLeft') return;
@@ -114,8 +131,8 @@ const { num } = Astro.props;
     select(0);
     new IntersectionObserver(
       ([entry]) => {
-        if (entry.isIntersecting) schedule();
-        else window.clearTimeout(timer);
+        inView = entry.isIntersecting;
+        schedule();
       },
       { threshold: 0.35 },
     ).observe(root);
@@ -316,5 +333,20 @@ const { num } = Astro.props;
       grid-template-columns: 1fr;
       padding: 1.75rem 1.5rem;
     }
+  }
+  .qtoggle {
+    margin-top: 1rem;
+    padding: 0.4rem 0;
+    background: none;
+    border: 0;
+    font: inherit;
+    font-size: 0.85rem;
+    color: var(--ink-soft);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .qtoggle:hover {
+    color: var(--ink);
   }
 </style>

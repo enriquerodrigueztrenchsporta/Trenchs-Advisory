@@ -1,5 +1,6 @@
 ---
-import { DIAGNOSIS_MAILTO } from '../consts';
+import { DIAGNOSIS_MAILTO, EMAIL, url } from '../consts';
+import { holder } from '../data/legal';
 
 interface Props {
   kicker?: string;
@@ -24,9 +25,15 @@ const {
     <p class="closing__text" data-reveal style="--d:2">{text}</p>
     <div class="closing__actions" data-reveal style="--d:3">
       <a class="btn btn--light" href={DIAGNOSIS_MAILTO}>
-        Solicitar diagnóstico <span class="btn__arrow" aria-hidden="true">→</span>
+        Solicitar diagnóstico <span class="sr-only">(abre su programa de correo)</span> <span class="btn__arrow" aria-hidden="true">→</span>
       </a>
+      <span class="closing__mail">o escríbanos a <a href={`mailto:${EMAIL}`}>{EMAIL}</a></span>
     </div>
+    <p class="closing__privacy" data-reveal style="--d:4">
+      Protección de datos: {holder()} tratará los datos que nos envíe solo para responder a su solicitud.
+      Puede ejercer sus derechos de acceso, rectificación, supresión y demás escribiendo a ese mismo correo.
+      Más información en la <a href={url('legal/privacidad')}>política de privacidad</a>.
+    </p>
   </div>
 </section>
 
@@ -34,6 +41,7 @@ const {
 
 <style>
   .closing {
+    --focus: var(--gold-300);
     position: relative;
     background: var(--green-800);
     color: var(--cream-50);
@@ -94,6 +102,26 @@ const {
     flex-wrap: wrap;
     align-items: center;
     gap: 1rem 1.5rem;
+  }
+  .closing__mail {
+    color: var(--green-300);
+    overflow-wrap: anywhere;
+  }
+  .closing__mail a {
+    color: var(--cream-50);
+    text-underline-offset: 3px;
+  }
+  .closing__privacy {
+    position: relative;
+    margin-top: 2.5rem;
+    max-width: 44rem;
+    font-size: 0.8rem;
+    line-height: 1.55;
+    color: var(--green-300);
+  }
+  .closing__privacy a {
+    color: var(--cream-50);
+    text-underline-offset: 3px;
   }
 
 </style>

@@ -1,0 +1,28 @@
+---
+// Ficha del titular para las páginas legales. En borrador marca en amarillo los datos que faltan.
+import { OWNER } from '../data/legal';
+
+const rows: [string, string, string][] = [
+  ['Titular', OWNER.name, 'nombre o razón social'],
+  ['Nombre comercial', OWNER.tradeName, 'nombre comercial'],
+  ['NIF', OWNER.taxId, 'NIF'],
+  ['Domicilio', OWNER.address, 'domicilio'],
+];
+if (OWNER.type !== 'autonomo') rows.push(['Datos registrales', OWNER.registry, 'Registro Mercantil (solo sociedades)']);
+---
+<dl>
+  {rows.map(([label, value, missing]) => (
+    <>
+      <dt>{label}</dt>
+      <dd>{value.trim() ? value : <mark>[PENDIENTE: {missing}]</mark>}</dd>
+    </>
+  ))}
+  <dt>Correo electrónico</dt>
+  <dd><a href={`mailto:${OWNER.email}`}>{OWNER.email}</a></dd>
+  {OWNER.phone.trim() && (
+    <>
+      <dt>Teléfono</dt>
+      <dd><a href={`tel:${OWNER.phone.replace(/\s/g, '')}`}>{OWNER.phone}</a></dd>
+    </>
+  )}
+</dl>

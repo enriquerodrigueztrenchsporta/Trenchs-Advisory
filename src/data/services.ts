@@ -31,8 +31,8 @@ export const SERVICES: Service[] = [
     rows: [
       ['Dashboards ejecutivos', 'Panel de dirección con los indicadores críticos', 'Una única versión de la verdad'],
       ['Cuadros de mando Power BI', 'Modelo de datos y visualizaciones en producción', 'Autonomía de consulta sin depender de terceros'],
-      ['Definición de KPIs estratégicos', 'Catálogo de indicadores con definición y fuente', 'Fin de las discusiones sobre qué mide cada cifra'],
-      ['Reporting automatizado', 'Informes periódicos generados sin intervención manual', 'Días de trabajo liberados cada mes'],
+      ['Definición de KPIs estratégicos', 'Catálogo de indicadores con definición y fuente', 'Un criterio común sobre qué mide cada cifra'],
+      ['Reporting automatizado', 'Informes periódicos generados sin intervención manual', 'Menos tiempo dedicado a preparar informes'],
     ],
   },
   {
@@ -92,8 +92,8 @@ export const SERVICES: Service[] = [
     questions: [4],
     rows: [
       ['Identificación de casos de uso', 'Cartera de casos priorizada por retorno y viabilidad', 'IA con criterio, no por moda'],
-      ['Automatización documental', 'Extracción y tratamiento automático de documentos', 'Reducción drástica de tareas administrativas'],
-      ['Asistentes internos', 'Asistente sobre la documentación propia de la organización', 'Conocimiento accesible en segundos'],
+      ['Automatización documental', 'Extracción y tratamiento automático de documentos', 'Menos carga en tareas administrativas repetitivas'],
+      ['Asistentes internos', 'Asistente sobre la documentación propia de la organización', 'Conocimiento interno más fácil de consultar'],
       ['IA para soporte a la decisión', 'Integración de la IA en los flujos de gestión', 'Mejor decisión en menos tiempo'],
       ['Formación ejecutiva', 'Programa a medida para dirección y equipos', 'Adopción real y uso responsable'],
     ],

@@ -2,7 +2,13 @@
 import Logo from './Logo.astro';
 import { EMAIL, url } from '../consts';
 import { SERVICES, FIRMA_NAV } from '../data/services';
+import { holder } from '../data/legal';
 
+const legal = [
+  { name: 'Aviso legal y condiciones de uso', path: 'legal/aviso-legal' },
+  { name: 'Política de privacidad', path: 'legal/privacidad' },
+  { name: 'Política de cookies', path: 'legal/cookies' },
+];
 const year = new Date().getFullYear();
 ---
 <footer class="footer">
@@ -25,12 +31,41 @@ const year = new Date().getFullYear();
     </div>
   </div>
   <div class="container footer__legal">
-    <span>© {year} Trenchs Advisory</span>
+    <span>© {year} {holder()}</span>
+    <nav class="footer__legal-nav" aria-label="Información legal">
+      {legal.map((l) => <a href={url(l.path)}>{l.name}</a>)}
+    </nav>
+    <button class="footer__motion" type="button" aria-pressed="false" data-motion-toggle>
+      Pausar animaciones
+    </button>
   </div>
 </footer>
 
+<script>
+  const btn = document.querySelector<HTMLButtonElement>('[data-motion-toggle]');
+  if (btn) {
+    const root = document.documentElement;
+    const render = () => {
+      const paused = root.classList.contains('motion-paused');
+      btn.setAttribute('aria-pressed', String(paused));
+      btn.textContent = paused ? 'Reanudar animaciones' : 'Pausar animaciones';
+    };
+    render();
+    btn.addEventListener('click', () => {
+      const paused = root.classList.toggle('motion-paused');
+      try {
+        if (paused) localStorage.setItem('motion', 'paused');
+        else localStorage.removeItem('motion');
+      } catch {}
+      document.dispatchEvent(new CustomEvent('motionchange', { detail: { paused } }));
+      render();
+    });
+  }
+</script>
+
 <style>
   .footer {
+    --focus: var(--gold-300);
     background: var(--green-900);
     color: var(--green-300);
     font-size: 0.9rem;
@@ -71,9 +106,36 @@ const year = new Date().getFullYear();
     color: var(--cream-50);
   }
   .footer__legal {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 2rem;
     padding-block: 1.5rem 2rem;
     border-top: 1px solid rgb(245 243 238 / 0.12);
     font-size: 0.8rem;
+  }
+  .footer__legal-nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.5rem;
+  }
+  .footer__legal-nav a {
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .footer__motion {
+    margin-left: auto;
+    padding: 0.35rem 0;
+    background: none;
+    border: 0;
+    font: inherit;
+    color: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .footer__motion:hover {
+    color: var(--cream-50);
   }
 
   @media (max-width: 900px) {

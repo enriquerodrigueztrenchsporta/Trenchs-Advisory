@@ -17,6 +17,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Borrador: publica aunque falten los datos del titular en src/data/legal.ts.
+      # Quitar cuando estén rellenos para que el build vuelva a exigirlos.
+      LEGAL_DRAFT: '1'
     steps:
       - uses: actions/checkout@v4
       - uses: withastro/action@v4

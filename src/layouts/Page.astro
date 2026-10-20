@@ -14,7 +14,7 @@ const { title, description, closing = {} } = Astro.props;
 ---
 <Base title={title} description={description}>
   <Header />
-  <main>
+  <main id="contenido" tabindex="-1">
     <slot />
   </main>
   <Closing {...closing} />

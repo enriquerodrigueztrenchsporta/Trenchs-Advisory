@@ -1,0 +1,101 @@
+---
+import Legal from '../../layouts/Legal.astro';
+import OwnerData from '../../components/OwnerData.astro';
+import { url } from '../../consts';
+import { holder } from '../../data/legal';
+
+const site = new URL(import.meta.env.BASE_URL, Astro.site).href;
+---
+<Legal
+  title="Aviso legal y condiciones de uso"
+  description="Datos identificativos del titular de la web de Trenchs Advisory y condiciones de uso del sitio."
+>
+  <h2>1. Titular del sitio web</h2>
+  <p>
+    En cumplimiento del artículo 10 de la Ley 34/2002, de servicios de la sociedad de la información y de
+    comercio electrónico (LSSI-CE), se informa de los datos del titular de este sitio web:
+  </p>
+  <OwnerData />
+
+  <h2>2. Objeto y aceptación</h2>
+  <p>
+    Estas condiciones regulan el acceso y el uso del sitio web <a href={site}>{site}</a> (en adelante, «la
+    web»). Navegar por la web implica aceptarlas. Si no está de acuerdo con ellas, le rogamos que no la
+    utilice.
+  </p>
+
+  <h2>3. Condiciones de uso</h2>
+  <p>Usted se compromete a utilizar la web conforme a la ley, a la buena fe y a estas condiciones, y en particular a no:</p>
+  <ul>
+    <li>Emplearla con fines ilícitos o que puedan dañar los derechos o intereses de terceros.</li>
+    <li>Intentar acceder a áreas restringidas de los sistemas que la alojan, ni introducir virus o código dañino.</li>
+    <li>Reproducir, distribuir o transformar sus contenidos fuera de lo permitido en el apartado 6.</li>
+  </ul>
+
+  <h2>4. Carácter de la información</h2>
+  <p>
+    Los contenidos de la web tienen carácter general e informativo. No constituyen asesoramiento profesional
+    sobre ningún caso concreto ni una oferta contractual vinculante.
+  </p>
+  <p>
+    Los beneficios que se describen para cada servicio expresan su objetivo, no un resultado garantizado: el
+    resultado de cada encargo depende de la organización y de su punto de partida. El alcance, el plazo, las
+    condiciones económicas y los compromisos de cada servicio se fijan por escrito en la propuesta o el
+    contrato correspondiente.
+  </p>
+
+  <h2>5. Contratación, pagos y reembolsos</h2>
+  <p>
+    La web no permite contratar servicios ni realizar pagos en línea, y no contiene formularios. El contacto se
+    realiza por correo electrónico. Por ese motivo la web no incluye una política de devoluciones o reembolsos:
+    las condiciones de cancelación, facturación y, en su caso, reembolso de cada encargo se recogen en su
+    contrato, junto con los derechos que la normativa de consumidores reconozca cuando el cliente tenga la
+    condición de consumidor.
+  </p>
+
+  <h2>6. Propiedad intelectual e industrial</h2>
+  <p>
+    Los textos, el diseño, el logotipo, los gráficos y el código de la web pertenecen a {holder()} o se usan con
+    licencia. Queda prohibida su reproducción, distribución, comunicación pública o transformación sin
+    autorización previa, salvo para uso personal y privado o en los casos que permita la ley, como el derecho
+    de cita.
+  </p>
+  <p>
+    La web utiliza las tipografías Inter y Newsreader, distribuidas bajo la licencia SIL Open Font License 1.1
+    y alojadas en la propia web. Las marcas de terceros que se mencionan, como Power BI (de Microsoft), se citan
+    solo para describir los servicios y pertenecen a sus respectivos titulares, sin que su mención implique
+    relación o patrocinio.
+  </p>
+
+  <h2>7. Responsabilidad</h2>
+  <p>
+    Procuramos que la información de la web sea correcta y esté actualizada, pero no podemos garantizar la
+    ausencia de errores ni la disponibilidad ininterrumpida de la web. No respondemos de los daños derivados
+    de interrupciones técnicas ajenas a nuestro control ni del uso de la web contrario a estas condiciones.
+  </p>
+  <p>
+    Si la web enlaza con sitios de terceros, lo hace a título informativo: no controlamos sus contenidos ni
+    respondemos de ellos. Si tiene conocimiento de un contenido ilícito enlazado, le agradeceremos que nos lo
+    comunique para retirarlo.
+  </p>
+
+  <h2>8. Protección de datos y cookies</h2>
+  <p>
+    El tratamiento de sus datos personales se explica en la <a href={url('legal/privacidad')}>política de
+    privacidad</a>. La web no utiliza cookies; los detalles están en la
+    <a href={url('legal/cookies')}>política de cookies</a>.
+  </p>
+
+  <h2>9. Legislación aplicable y jurisdicción</h2>
+  <p>
+    Estas condiciones se rigen por la legislación española. Para cualquier controversia serán competentes los
+    juzgados y tribunales que correspondan conforme a la ley. Cuando el usuario tenga la condición de
+    consumidor, lo serán los de su domicilio.
+  </p>
+
+  <h2>10. Cambios</h2>
+  <p>
+    Podemos actualizar estas condiciones para adaptarlas a cambios legales o de la web. La fecha de la última
+    actualización figura al principio de la página.
+  </p>
+</Legal>
