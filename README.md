@@ -15,16 +15,12 @@ La web queda en http://localhost:4321/Trenchs-Advisory/
 
 Cada push a `main` publica la web en GitHub Pages mediante `.github/workflows/deploy.yml`.
 
-Antes de publicar hay que rellenar los datos del titular en `src/data/legal.ts` (exigidos por la LSSI-CE):
-mientras falte alguno, `npm run build` falla a propósito. Para previsualizar sin ellos:
-
-```sh
-LEGAL_DRAFT=1 npm run build   # en PowerShell: $env:LEGAL_DRAFT='1'; npm run build
-```
+Los datos del titular (nombre o razón social, NIF, domicilio) se rellenan en `src/data/legal.ts`; los campos vacíos
+no se muestran. La LSSI-CE (art. 10) exige publicarlos en una web de actividad económica.
 
 Después de compilar, `npm run verify` revisa el HTML generado: un `h1` por página, enlace «Saltar al contenido»,
 enlaces del pie a las páginas legales, SVG decorativos ocultos a lectores de pantalla, enlaces internos rotos,
-recursos o enlaces externos no revisados, código de cookies o rastreo y datos del titular pendientes.
+recursos o enlaces externos no revisados, código de cookies o rastreo y marcadores «[PENDIENTE]».
 
 ## Cumplimiento legal y accesibilidad
 

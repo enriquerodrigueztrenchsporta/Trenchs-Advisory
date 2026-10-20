@@ -1,5 +1,5 @@
 // Comprobaciones sobre la web compilada (dist/): requisitos legales, accesibilidad básica y ausencia de rastreo.
-// Uso: npm run build && npm run verify   (en borrador: LEGAL_DRAFT=1 npm run build && LEGAL_DRAFT=1 npm run verify)
+// Uso: npm run build && npm run verify
 
 import { readdirSync, readFileSync, existsSync, statSync } from 'node:fs';
 import { join, relative } from 'node:path';
@@ -9,7 +9,6 @@ const BASE = '/Trenchs-Advisory/';
 const LEGAL = ['legal/aviso-legal', 'legal/privacidad', 'legal/cookies'];
 // Enlaces externos permitidos (simples enlaces, nunca recursos que se carguen solos).
 const EXTERNAL_LINKS = ['https://enriquerodrigueztrenchsporta.github.io/Trenchs-Advisory', 'https://docs.github.com/', 'https://www.aepd.es'];
-const draft = process.env.LEGAL_DRAFT === '1';
 
 const pages = (function walk(dir) {
   return readdirSync(dir).flatMap((f) => {
@@ -55,7 +54,7 @@ for (const page of pages) {
     if (!existsSync(target) && !existsSync(join(DIST, rel))) fail(page, `enlace roto: ${m[1]}`);
   }
 
-  if (!draft && html.includes('[PENDIENTE')) fail(page, 'datos del titular pendientes');
+  if (/\[\s*pendiente/i.test(html)) fail(page, 'marcador [PENDIENTE] en la página');
 }
 
 for (const asset of readdirSync(join(DIST, '_astro')).filter((f) => f.endsWith('.js') || f.endsWith('.css'))) {
@@ -67,4 +66,4 @@ if (errors.length) {
   console.error(`✗ ${errors.length} problema(s):\n  ${errors.join('\n  ')}`);
   process.exit(1);
 }
-console.log(`✓ ${pages.length} páginas verificadas${draft ? ' (borrador: se admiten datos pendientes)' : ''}.`);
+console.log(`✓ ${pages.length} páginas verificadas.`);
